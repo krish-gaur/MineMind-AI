@@ -22,9 +22,7 @@ class Provenance(BaseModel):
     url: str | None = None
     licence: str | None = None
     attribution: str | None = None
-    timestamp: datetime | None = Field(
-        default=None, description="Generation, upload or retrieval time (UTC)."
-    )
+    timestamp: datetime | None = Field(default=None, description="Generation, upload or retrieval time (UTC).")
     limitations: list[str] = Field(default_factory=list)
 
 

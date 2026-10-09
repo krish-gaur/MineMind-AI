@@ -152,9 +152,7 @@ def _weather_delay(rng: np.random.Generator, rain: np.ndarray) -> np.ndarray:
 def generate_production_frame(seed: int = SEED) -> pd.DataFrame:
     """Return the synthetic production table (history plus pending plan rows)."""
     rng = np.random.default_rng(seed)
-    dates = pd.date_range(
-        HISTORY_START, pd.Timestamp(HISTORY_END) + pd.Timedelta(days=PENDING_DAYS), freq="D"
-    )
+    dates = pd.date_range(HISTORY_START, pd.Timestamp(HISTORY_END) + pd.Timedelta(days=PENDING_DAYS), freq="D")
     n_hist = int((pd.Timestamp(HISTORY_END) - pd.Timestamp(HISTORY_START)).days) + 1
     months = dates.month.to_numpy()
     dow = dates.dayofweek.to_numpy()

@@ -58,7 +58,7 @@ class Settings(BaseSettings):
     open_meteo_archive_url: str = "https://archive-api.open-meteo.com/v1/archive"
 
     # Forecasting.
-    forecast_horizon_days: int = Field(default=30, ge=7, le=120)
+    forecast_horizon_days: int = Field(default=30, ge=7, le=90)
 
     @property
     def cors_origin_list(self) -> list[str]:

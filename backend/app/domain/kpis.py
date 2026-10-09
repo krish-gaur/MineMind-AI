@@ -86,9 +86,7 @@ def _kpis(filtered: pd.DataFrame, matched: pd.DataFrame) -> dict[str, Any]:
         days_below = float((matched["actual_production_t"] < matched["planned_production_t"]).mean() * 100.0)
 
     downtime = (
-        filtered["equipment_downtime_h"].dropna()
-        if "equipment_downtime_h" in filtered
-        else pd.Series(dtype=float)
+        filtered["equipment_downtime_h"].dropna() if "equipment_downtime_h" in filtered else pd.Series(dtype=float)
     )
     downtime_mean = float(downtime.mean()) if len(downtime) else None
     heavy_pct = float((downtime > policy.DOWNTIME_HEAVY_DAY_H).mean() * 100.0) if len(downtime) else None
@@ -147,9 +145,7 @@ def _monthly(matched: pd.DataFrame, filtered: pd.DataFrame) -> list[dict[str, An
     downtime_by_month: pd.Series = pd.Series(dtype=float)
     if "equipment_downtime_h" in filtered:
         downtime_by_month = (
-            filtered.assign(month=filtered["date"].dt.strftime("%Y-%m"))
-            .groupby("month")["equipment_downtime_h"]
-            .mean()
+            filtered.assign(month=filtered["date"].dt.strftime("%Y-%m")).groupby("month")["equipment_downtime_h"].mean()
         )
     for month in planned.index:
         plan_m = float(planned.loc[month])

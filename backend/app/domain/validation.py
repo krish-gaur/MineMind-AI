@@ -95,9 +95,7 @@ def _decode(raw: bytes) -> str:
     try:
         return raw.decode("utf-8-sig")
     except UnicodeDecodeError as exc:
-        raise ProductionFileError(
-            "The file is not UTF-8 encoded. Save it as 'CSV UTF-8' and upload again."
-        ) from exc
+        raise ProductionFileError("The file is not UTF-8 encoded. Save it as 'CSV UTF-8' and upload again.") from exc
 
 
 def _read_rows(text: str) -> tuple[list[str], list[tuple[int, list[str]]]]:
@@ -130,11 +128,7 @@ def _check_header(header: list[str], collector: _Collector) -> None:
         collector.add(
             "error",
             "missing_columns",
-            "Required column(s) missing: "
-            + ", ".join(missing)
-            + ". Found: "
-            + (", ".join(header) or "none")
-            + ".",
+            "Required column(s) missing: " + ", ".join(missing) + ". Found: " + (", ".join(header) or "none") + ".",
         )
     unknown = [name for name in header if name not in KNOWN_COLUMNS]
     if unknown:
@@ -146,9 +140,7 @@ def _check_header(header: list[str], collector: _Collector) -> None:
         )
 
 
-def _typed_frame(
-    header: list[str], rows: list[tuple[int, list[str]]], collector: _Collector
-) -> pd.DataFrame | None:
+def _typed_frame(header: list[str], rows: list[tuple[int, list[str]]], collector: _Collector) -> pd.DataFrame | None:
     """Build a typed frame. Records row-level errors and returns None if any exist."""
     width = len(header)
     problems: dict[int, list[str]] = {}
@@ -220,9 +212,7 @@ def _typed_frame(
     return frame
 
 
-def _report_rows(
-    collector: _Collector, rows: list[tuple[int, list[str]]], problems: dict[int, list[str]]
-) -> None:
+def _report_rows(collector: _Collector, rows: list[tuple[int, list[str]]], problems: dict[int, list[str]]) -> None:
     examples = [f"line {rows[index][0]}: " + "; ".join(texts) for index, texts in sorted(problems.items())]
     collector.add(
         "error",
@@ -311,8 +301,7 @@ def _add_warnings(frame: pd.DataFrame, collector: _Collector, now: datetime) -> 
             "Actual output exceeds 2.5 times the plan on some rows. Verify these records.",
             affected=int(implausible.sum()),
             examples=[
-                f"{frame.at[i, 'date'].date()} {frame.at[i, 'zone_id']}"
-                for i in frame.index[implausible.to_numpy()]
+                f"{frame.at[i, 'date'].date()} {frame.at[i, 'zone_id']}" for i in frame.index[implausible.to_numpy()]
             ],
         )
 

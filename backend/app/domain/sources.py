@@ -73,9 +73,7 @@ SOURCES: tuple[DataSource, ...] = (
         url="https://open-meteo.com/en/docs/historical-weather-api",
         access="Keyless HTTP GET. Free for non-commercial use (fair-use limits apply).",
         licence="Open-Meteo data: CC BY 4.0. Commercial use requires a paid Open-Meteo plan.",
-        attribution=(
-            "Weather data by Open-Meteo.com (CC BY 4.0). ERA5 data: Copernicus Climate Change Service."
-        ),
+        attribution=("Weather data by Open-Meteo.com (CC BY 4.0). ERA5 data: Copernicus Climate Change Service."),
         used_for="Daily precipitation at a site coordinate, used to enrich rainfall where requested.",
         limitations=(
             "Reanalysis grid cell, not a station measurement at the mine.",

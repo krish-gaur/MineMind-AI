@@ -51,9 +51,7 @@ def _validate_filters(
 
 @router.get("/overview", response_model=OverviewResponse, summary="Executive overview KPIs and trends")
 def overview(
-    dataset_id: str | None = Query(
-        default=None, description="Production dataset id. Defaults to the synthetic demo."
-    ),
+    dataset_id: str | None = Query(default=None, description="Production dataset id. Defaults to the synthetic demo."),
     start: date | None = Query(default=None),
     end: date | None = Query(default=None),
     mine_id: str | None = Query(default=None, max_length=40),
@@ -90,9 +88,7 @@ def overview(
             "and attainment figures; no values were imputed."
         )
     if data["empty"]:
-        notes.append(
-            "No records match the selected filters. Widen the date range or clear the mine/zone filter."
-        )
+        notes.append("No records match the selected filters. Widen the date range or clear the mine/zone filter.")
     notes.append("Gap and attainment compare plan and actual on the same days only (matched days).")
 
     return OverviewResponse(

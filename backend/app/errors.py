@@ -89,9 +89,7 @@ def _request_id(request: Request) -> str | None:
     return getattr(request.state, "request_id", None)
 
 
-def _envelope(
-    request: Request, status_code: int, code: str, message: str, details: Any = None
-) -> JSONResponse:
+def _envelope(request: Request, status_code: int, code: str, message: str, details: Any = None) -> JSONResponse:
     body: dict[str, Any] = {
         "error": {
             "code": code,

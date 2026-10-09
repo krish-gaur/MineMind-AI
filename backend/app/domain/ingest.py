@@ -75,9 +75,7 @@ def ensure_demo_dataset(store: DatasetStore, *, now: datetime | None = None) -> 
         existing = store.get_manifest(DEMO_DATASET_ID)
         if existing.generator and existing.generator.get("generator") == GENERATOR_VERSION:
             return existing
-        log.info(
-            "regenerating demo dataset", extra={"dataset_id": DEMO_DATASET_ID, "event": "demo_regenerate"}
-        )
+        log.info("regenerating demo dataset", extra={"dataset_id": DEMO_DATASET_ID, "event": "demo_regenerate"})
 
     frame = generate_production_frame()
     csv_bytes = frame_to_csv_bytes(frame)
@@ -89,8 +87,7 @@ def ensure_demo_dataset(store: DatasetStore, *, now: datetime | None = None) -> 
     manifest_fields: dict[str, object] = {
         "name": "Synthetic demonstration production (SYN-A, SYN-B, SYN-C)",
         "description": (
-            "SYNTHETIC. Fictional mines and zones for demonstrating the workflow. "
-            "Not MOIL operational records."
+            "SYNTHETIC. Fictional mines and zones for demonstrating the workflow. Not MOIL operational records."
         ),
         "source_type": SourceType.SYNTHETIC,
         "provenance": demo_provenance(now),

@@ -18,6 +18,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from app import __version__
 from app.api.router import api_router
 from app.config import Settings, get_settings
+from app.domain.forecast_service import ForecastService
 from app.domain.ingest import ensure_demo_dataset
 from app.domain.store import DatasetStore
 from app.errors import register_exception_handlers
@@ -56,6 +57,11 @@ def create_app(settings: Settings | None = None) -> FastAPI:
     )
     application.state.settings = settings
     application.state.store = DatasetStore(settings.data_dir)
+    application.state.forecast = ForecastService(
+        application.state.store,
+        settings.artifacts_dir,
+        horizon_days=settings.forecast_horizon_days,
+    )
 
     register_exception_handlers(application)
     # Added first so it sits inside CORS: error responses still carry CORS headers.

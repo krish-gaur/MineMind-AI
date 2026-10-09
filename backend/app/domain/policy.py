@@ -22,6 +22,8 @@ DATA_COMPLETENESS_MIN_PCT = 95.0  # below this share of rows with actuals, data 
 ZONE_GAP_CONCENTRATION_PCT = 50.0  # share of shortfall tonnes in one zone that is flagged
 
 # --- risk bands (applied to model outputs; see docs/METHODOLOGY.md) ---------
+# A "material shortfall day" is one where actual output is below (100 - tolerance)% of plan.
+SHORTFALL_DAY_TOLERANCE_PCT = 5.0
 RISK_HIGH_SHORTFALL_PCT = 5.0  # expected net shortfall (% of plan) at or above which risk is HIGH
 RISK_MEDIUM_SHORTFALL_PCT = 2.0
 RISK_HIGH_PROBABILITY = 0.75  # mean daily shortfall probability at or above which risk is HIGH

@@ -121,8 +121,7 @@ def preview_dataset(
     head = frame.head(rows).copy()
     head["date"] = head["date"].dt.strftime("%Y-%m-%d")
     records = [
-        {column: _json_safe(value) for column, value in record.items()}
-        for record in head.to_dict(orient="records")
+        {column: _json_safe(value) for column, value in record.items()} for record in head.to_dict(orient="records")
     ]
     return DatasetPreview(
         dataset_id=dataset_id,
