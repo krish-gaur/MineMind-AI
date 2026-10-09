@@ -73,7 +73,7 @@ These are the numbers the product shows for the synthetic demonstration data. Th
 
 Read the table with these points in mind:
 
-* Gradient boosting is the pre-specified forecast model. On several scopes the ridge benchmark has lower MAE (for example all mines, SYN-B-E and SYN-C-C1). The product says so on the affected pages; it does not switch models after the fact.
+* Gradient boosting is the pre-specified forecast model. **On 7 of the 9 scopes the ridge benchmark has lower MAE than gradient boosting** (all exceptions are Zone SYN-A-Z2 and Zone SYN-B-W, where gradient boosting is marginally better). The product reports this on the affected pages and does not switch models after the fact. Whether to make ridge the default is an open decision; if taken, it needs a holdout period that was not used to choose it.
 * SYN-C and SYN-C-C1 rows are identical because mine SYN-C has a single zone.
 * "Gap to best baseline" is the mean difference in absolute error against the lowest-MAE baseline, with a 95% moving-block bootstrap interval. Negative means the model has lower error.
 * The classifier target is a *material shortfall day* (actual below 95% of plan).

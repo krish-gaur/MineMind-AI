@@ -55,7 +55,7 @@ Features: actuals at lags 1, 2 and 7; means of the last 7 and 28 actual days; at
 | Ridge (benchmark) | standardised features, median imputation, α = 1 |
 | **Gradient boosting (forecast model)** | HistGradientBoostingRegressor, 250 iterations, learning rate 0.05, 15 leaves, min 20 samples per leaf, L2 = 1, fixed random state |
 
-The gradient boosting model was specified before the backtest was run. Ridge is reported as a benchmark. When ridge has lower backtest MAE, the verdict text says so, and the forecast still uses gradient boosting. Choosing the better model after seeing the test results would bias the comparison.
+The gradient boosting model was specified before the backtest was run. Ridge is reported as a benchmark. On 7 of the 9 scopes in the synthetic backtest, ridge has lower MAE (table in `docs/TEST_REPORT.md`, section 5). When that happens the verdict text says so, and the forecast still uses gradient boosting. Choosing the better model after seeing the test results would bias the comparison. Switching the default is a legitimate decision, but it should be validated on a holdout period that was not used to choose it.
 
 ### 3.5 Metrics and comparison
 

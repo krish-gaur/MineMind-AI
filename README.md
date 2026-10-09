@@ -174,7 +174,7 @@ Honest list. Items marked *not implemented* were in the brief's spirit but are a
 * Forecasts use plan, lagged actuals and lagged operational inputs. Future operational inputs are scenario assumptions (trailing 28-day means), so forecasts are conditional on those assumptions.
 * Only one regression family (gradient boosting) plus a ridge benchmark and a logistic classifier. No hyperparameter search, no ensembles, no conformal calibration.
 * Prediction intervals are empirical from backtest residuals. They are not calibrated predictive distributions.
-* On the all-mines scope the ridge benchmark had lower backtest MAE than the gradient boosting model. The UI and the API say so; the pre-specified gradient boosting model remains the forecast.
+* On 7 of the 9 scopes in the synthetic backtest, the ridge benchmark has lower MAE than the gradient boosting model. The UI and the API report this; the pre-specified gradient boosting model remains the forecast. Whether to make ridge the default is an open decision (see `docs/TEST_REPORT.md`, section 5).
 * Recommendation impacts are associations in the data (for example, the output difference between heavy-downtime and normal days times the number of heavy days). They are not causal effects.
 
 **Product**

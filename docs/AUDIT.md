@@ -67,7 +67,7 @@ Each row is backed by commands and their real outputs in [`TEST_REPORT.md`](TEST
 
 ## 5. Decisions taken during the build
 
-* **Gradient boosting is the forecast model; ridge is a benchmark.** The model was fixed before the backtest. On the all-mines scope ridge had lower backtest MAE. The verdict says so and the forecast is not swapped.
+* **Gradient boosting is the forecast model; ridge is a benchmark.** The model was fixed before the backtest. On 7 of the 9 scopes ridge has lower backtest MAE. The verdict text says so, the forecast is not swapped, and the choice of default is flagged as open.
 * **Material-shortfall target (below 95% of plan)** for the classifier. The strict "below plan" target was almost always true in the synthetic data (base rate around 99%), so its AUC was meaningless. The tolerance is policy and is shown in the UI.
 * **Interval for the net gap** uses every backtest window of the same length, with at least 70% of days present, rather than only complete windows. Strict windows left none for the all-mines scope.
 * **HTML reports are self-contained and printable; PDF is not implemented.** This keeps the dependency list small.
