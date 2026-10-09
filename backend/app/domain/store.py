@@ -29,6 +29,8 @@ log = get_logger("minemind.store")
 DATASET_ID_RE = re.compile(r"^[a-z0-9][a-z0-9\-]{2,63}$")
 MANIFEST_NAME = "manifest.json"
 PRODUCTION_FILE = "data.csv"
+ZONES_FILE = "zones.geojson"
+DRILLHOLES_FILE = "drillholes.csv"
 
 
 def new_dataset_id(prefix: str = "upl") -> str:
@@ -135,6 +137,10 @@ class DatasetStore:
             date_max=outcome.report.date_max,
             mines=outcome.report.mines,
             zones=outcome.report.zones,
+            mine_zones={
+                str(mine): sorted(str(z) for z in group["zone_id"].unique())
+                for mine, group in outcome.frame.groupby("mine_id")
+            },
             rows_with_actual=outcome.report.rows_with_actual,
             rows_pending_actual=outcome.report.rows_pending_actual,
             validation_status=outcome.report.status,
@@ -159,6 +165,34 @@ class DatasetStore:
         log.info(
             "dataset saved",
             extra={"dataset_id": dataset_id, "event": "dataset_saved", "source": manifest.source_type},
+        )
+        return manifest
+
+    def read_bytes(self, dataset_id: str) -> bytes:
+        return self.data_path(dataset_id).read_bytes()
+
+    def save_artifact(
+        self,
+        *,
+        manifest: DatasetManifest,
+        payload: bytes,
+    ) -> DatasetManifest:
+        """Persist a non-production dataset (GeoJSON zones or drillhole CSV) atomically."""
+        with self._lock:
+            target = self._dataset_dir(manifest.id)
+            staging = target.with_name(target.name + ".tmp")
+            if staging.exists():
+                shutil.rmtree(staging)
+            staging.mkdir(parents=True)
+            (staging / manifest.data_file).write_bytes(payload)
+            (staging / MANIFEST_NAME).write_text(manifest.model_dump_json(indent=2), encoding="utf-8")
+            if target.exists():
+                shutil.rmtree(target)
+            os.replace(staging, target)
+            self._frame_cache.pop(manifest.id, None)
+        log.info(
+            "dataset saved",
+            extra={"dataset_id": manifest.id, "event": "dataset_saved", "source": manifest.source_type},
         )
         return manifest
 

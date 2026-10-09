@@ -83,3 +83,12 @@ export function addDays(iso: string, days: number): string {
 export function pluralise(count: number, singular: string, plural = `${singular}s`): string {
   return `${formatNumber(count)} ${count === 1 ? singular : plural}`;
 }
+
+const SHORT_MONTHS = MONTHS;
+
+/** Short axis label for charts: "30 Sep". */
+export function formatShortDate(iso: string): string {
+  const date = new Date(`${iso.slice(0, 10)}T00:00:00Z`);
+  if (Number.isNaN(date.getTime())) return iso;
+  return `${String(date.getUTCDate()).padStart(2, "0")} ${SHORT_MONTHS[date.getUTCMonth()]}`;
+}

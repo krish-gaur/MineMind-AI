@@ -9,12 +9,17 @@ from fastapi import APIRouter, Depends, File, Form, Query, Response, UploadFile,
 
 from app.api.deps import get_app_settings, get_store
 from app.config import Settings
-from app.domain.ingest import ALLOWED_PRODUCTION_EXTENSIONS, ingest_production_upload
+from app.domain.ingest import (
+    ALLOWED_PRODUCTION_EXTENSIONS,
+    ingest_drillholes_upload,
+    ingest_production_upload,
+    ingest_zones_upload,
+)
 from app.domain.provenance import SOURCE_LABELS, SourceType
 from app.domain.schema import PRODUCTION_COLUMNS
 from app.domain.store import DatasetStore
 from app.domain.synthetic import SEED, frame_to_csv_bytes
-from app.errors import AppError, PayloadTooLargeError, ValidationFailedError
+from app.errors import PayloadTooLargeError
 from app.schemas.datasets import (
     DatasetDetail,
     DatasetList,
@@ -51,6 +56,7 @@ def summary_of(manifest: DatasetManifest) -> DatasetSummary:
         date_max=manifest.date_max,
         mines=manifest.mines,
         zones=manifest.zones,
+        mine_zones=manifest.mine_zones,
         rows_with_actual=manifest.rows_with_actual,
         rows_pending_actual=manifest.rows_pending_actual,
         validation_status=manifest.validation_status,
@@ -105,6 +111,7 @@ def get_dataset(dataset_id: str, store: DatasetStore = Depends(get_store)) -> Da
         **base,
         provenance=manifest.provenance,
         validation=manifest.validation,
+        validation_notes=manifest.validation_notes,
         original_filename=manifest.original_filename,
         size_bytes=manifest.size_bytes,
         generator=manifest.generator,
@@ -162,19 +169,18 @@ def export_dataset(dataset_id: str, store: DatasetStore = Depends(get_store)) ->
     },
 )
 async def upload_dataset(
-    file: Annotated[UploadFile, File(description="Production CSV (UTF-8, header row required).")],
+    file: Annotated[UploadFile, File(description="CSV (production or drillholes) or GeoJSON (exploration zones).")],
     name: Annotated[str | None, Form(max_length=120)] = None,
     description: Annotated[str | None, Form(max_length=400)] = None,
-    kind: Annotated[Literal["production"], Form()] = "production",
+    kind: Annotated[Literal["production", "drillholes", "exploration_zones"], Form()] = "production",
     store: DatasetStore = Depends(get_store),
     settings: Settings = Depends(get_app_settings),
 ) -> DatasetDetail:
-    del kind  # only production uploads are supported in this release
     limit = settings.max_upload_bytes
     raw = await file.read(limit + 1)
     if len(raw) > limit:
         raise PayloadTooLargeError(f"The file is larger than the {settings.max_upload_mb:g} MB upload limit.")
-    try:
+    if kind == "production":
         manifest = ingest_production_upload(
             store,
             raw=raw,
@@ -183,14 +189,15 @@ async def upload_dataset(
             description=description,
             max_rows=settings.max_upload_rows,
         )
-    except ValidationFailedError:
-        raise
-    except AppError:
-        raise
+    elif kind == "drillholes":
+        manifest = ingest_drillholes_upload(store, raw=raw, filename=file.filename, name=name, description=description)
+    else:
+        manifest = ingest_zones_upload(store, raw=raw, filename=file.filename, name=name, description=description)
     return DatasetDetail(
         **summary_of(manifest).model_dump(),
         provenance=manifest.provenance,
         validation=manifest.validation,
+        validation_notes=manifest.validation_notes,
         original_filename=manifest.original_filename,
         size_bytes=manifest.size_bytes,
         generator=manifest.generator,

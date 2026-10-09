@@ -21,7 +21,7 @@ from typing import Any
 import numpy as np
 import pandas as pd
 
-GENERATOR_VERSION = "synthetic-production-v1.0"
+GENERATOR_VERSION = "synthetic-production-v1.1"
 DEMO_DATASET_ID = "demo-synthetic-production-v1"
 SEED = 26009
 HISTORY_START = date(2023, 4, 1)

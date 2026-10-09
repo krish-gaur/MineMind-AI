@@ -31,6 +31,7 @@ class DatasetManifest(BaseModel):
     date_max: date | None = None
     mines: list[str] = Field(default_factory=list)
     zones: list[str] = Field(default_factory=list)
+    mine_zones: dict[str, list[str]] = Field(default_factory=dict)
     rows_with_actual: int = 0
     rows_pending_actual: int = 0
     validation_status: Literal["valid", "valid_with_warnings", "invalid"] | None = None
@@ -40,6 +41,7 @@ class DatasetManifest(BaseModel):
     size_bytes: int
     original_filename: str | None = None
     generator: dict[str, Any] | None = None
+    validation_notes: list[str] = Field(default_factory=list)
 
 
 class DatasetSummary(BaseModel):
@@ -57,6 +59,7 @@ class DatasetSummary(BaseModel):
     date_max: date | None
     mines: list[str]
     zones: list[str]
+    mine_zones: dict[str, list[str]]
     rows_with_actual: int
     rows_pending_actual: int
     validation_status: str | None
@@ -70,6 +73,7 @@ class DatasetList(BaseModel):
 class DatasetDetail(DatasetSummary):
     provenance: Provenance
     validation: ValidationReport | None
+    validation_notes: list[str] = Field(default_factory=list)
     original_filename: str | None
     size_bytes: int
     generator: dict[str, Any] | None

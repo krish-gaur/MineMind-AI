@@ -26,7 +26,8 @@ ignore = [
 ]
 
 [tool.ruff.lint.per-file-ignores]
-"tests/*" = ["B011"]
+# Test fixtures contain long GeoJSON and CSV literals; wrapping them would hide the data.
+"tests/*" = ["B011", "E501"]
 
 [tool.mypy]
 python_version = "3.11"

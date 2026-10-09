@@ -12,6 +12,21 @@ export const NAV_ITEMS: NavItem[] = [
     description: "Plan, actual, constraints and freshness",
   },
   {
+    href: "/forecast",
+    label: "Forecast",
+    description: "Backtest, baselines and forward output",
+  },
+  {
+    href: "/risk",
+    label: "Shortfall risk",
+    description: "Expected gap, probability and risk band",
+  },
+  {
+    href: "/recommendations",
+    label: "Recommendations",
+    description: "Evidence-backed actions and rules checked",
+  },
+  {
     href: "/data",
     label: "Data & sources",
     description: "Upload, validate and inspect datasets",
