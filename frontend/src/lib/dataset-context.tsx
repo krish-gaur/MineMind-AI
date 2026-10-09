@@ -8,9 +8,12 @@ const STORAGE_KEY = "minemind.datasetId";
 const DEMO_ID = "demo-synthetic-production-v1";
 
 type DatasetContextValue = {
+  /** Every registered dataset (production, drillholes and exploration zones). */
   datasets: DatasetSummary[] | null;
+  /** Production datasets only: the ones analysis pages can use. */
+  productionDatasets: DatasetSummary[] | null;
   datasetsError: Error | null;
-  /** Currently selected dataset (null while the list is loading or empty). */
+  /** Currently selected production dataset (null while loading or when none exists). */
   active: DatasetSummary | null;
   selectDataset: (id: string) => void;
   reloadDatasets: () => void;
@@ -50,10 +53,18 @@ export function DatasetProvider({ children }: { children: React.ReactNode }) {
   const reloadDatasets = useCallback(() => setAttempt((n) => n + 1), []);
 
   const value = useMemo<DatasetContextValue>(() => {
-    const list = datasets ?? [];
+    const production = datasets?.filter((d) => d.kind === "production") ?? null;
+    const list = production ?? [];
     const active =
       list.find((d) => d.id === selectedId) ?? list.find((d) => d.id === DEMO_ID) ?? list[0] ?? null;
-    return { datasets, datasetsError, active, selectDataset, reloadDatasets };
+    return {
+      datasets,
+      productionDatasets: production,
+      datasetsError,
+      active,
+      selectDataset,
+      reloadDatasets,
+    };
   }, [datasets, datasetsError, selectedId, selectDataset, reloadDatasets]);
 
   return <DatasetContext.Provider value={value}>{children}</DatasetContext.Provider>;

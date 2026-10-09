@@ -4,7 +4,7 @@ import { useDatasets } from "@/lib/dataset-context";
 
 /** Chooses the production dataset used by every analysis page. */
 export function DatasetSwitcher() {
-  const { datasets, datasetsError, active, selectDataset, reloadDatasets } = useDatasets();
+  const { productionDatasets: datasets, datasetsError, active, selectDataset, reloadDatasets } = useDatasets();
 
   if (datasetsError) {
     return (

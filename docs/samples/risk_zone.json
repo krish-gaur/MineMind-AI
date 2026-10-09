@@ -1,0 +1,110 @@
+{
+  "request": "GET /api/risk?zone_id=SYN-A-Z2",
+  "status": 200,
+  "response": {
+    "dataset": {
+      "id": "demo-synthetic-production-v1",
+      "name": "Synthetic demonstration production (SYN-A, SYN-B, SYN-C)",
+      "source_type": "synthetic",
+      "source_label": "SYNTHETIC DEMONSTRATION DATA",
+      "is_synthetic": true,
+      "banner": "SYNTHETIC DEMONSTRATION DATA - not MOIL operational records. Forecasts and risk bands illustrate the workflow only.",
+      "date_max": "2026-10-30",
+      "provenance": {
+        "source_type": "synthetic",
+        "label": "SYNTHETIC DEMONSTRATION DATA",
+        "provider": "MineMind AI synthetic generator",
+        "description": "Deterministic daily production records for fictional mines SYN-A, SYN-B and SYN-C. Planned and actual tonnes, equipment downtime, weather and blasting delays, and rainfall are generated from simple, documented rules.",
+        "url": null,
+        "licence": "Not applicable (synthetic data generated for this demonstration).",
+        "attribution": null,
+        "timestamp": "2026-10-09T04:36:15.753609Z",
+        "limitations": [
+          "Not MOIL operational data and not calibrated to any real mine.",
+          "Relationships between delays and output are designed into the generator; associations found in this dataset describe the generator, not real operations.",
+          "Rainfall is synthetic here. Enrich the dataset with a public rainfall series to replace it.",
+          "... 1 more item(s) omitted"
+        ]
+      }
+    },
+    "scope": {
+      "mine_id": null,
+      "zone_id": "SYN-A-Z2",
+      "label": "Zone SYN-A-Z2",
+      "key": "ALL__SYN-A-Z2"
+    },
+    "horizon": {
+      "requested_days": 30,
+      "forecast_days": 30,
+      "start": "2026-10-01",
+      "end": "2026-10-30"
+    },
+    "expected": {
+      "plan_t": 26208.0,
+      "forecast_t": 19965.7,
+      "net_gap_t": -6242.3,
+      "net_gap_pct": -23.82,
+      "gap_interval_low_t": -7234.9,
+      "gap_interval_high_t": -6011.1,
+      "interval_basis": "empirical 10th-90th percentile of 204 overlapping 30-day backtest windows",
+      "value_kind": "estimate",
+      "forecast_value_kind": "forecast"
+    },
+    "shortfall_probability": {
+      "period_probability": 1.0,
+      "period_basis": "Share of backtest windows of the same length in which the realised gap was below plan, given the forecast net gap. Empirical, not a calibrated model output.",
+      "mean_daily_probability": 0.999,
+      "daily_definition": "Material shortfall day: actual below 95% of planned tonnes.",
+      "value_kind": "probability"
+    },
+    "band": {
+      "level": "high",
+      "label": "High",
+      "rule": "HIGH when the expected net gap to plan is at or below -5%; MEDIUM when it is at or below -2%; otherwise LOW. Thresholds are policy choices and are not learned from data.",
+      "thresholds": {
+        "high_at_or_below_pct": -5.0,
+        "medium_at_or_below_pct": -2.0
+      },
+      "expected_net_gap_pct": -23.82,
+      "value_kind": "rule_based"
+    },
+    "classification_check": {
+      "verdict": "beats_base_rate",
+      "text": "AUC 0.84 and Brier skill +11.9% against a base-rate forecast on the backtest.",
+      "roc_auc": 0.836,
+      "brier_skill_pct": 11.93,
+      "base_rate": 0.961,
+      "n": 258
+    },
+    "model_check": {
+      "regression_verdict": "beats_best_baseline",
+      "regression_text": "The gradient boosting model has lower MAE than the best baseline, and the 95% interval for the difference excludes zero on this backtest.",
+      "classifier_verdict": "beats_base_rate"
+    },
+    "drivers": [
+      {
+        "feature": "plan",
+        "label": "Planned tonnes for the day",
+        "importance_t": 70.198
+      },
+      {
+        "feature": "downtime_lag1",
+        "label": "Equipment downtime, previous day",
+        "importance_t": 10.32
+      },
+      {
+        "feature": "act_lag2",
+        "label": "Actual, two days earlier",
+        "importance_t": 2.256
+      },
+      "... 5 more item(s) omitted"
+    ],
+    "limitations": [
+      "Net gap is forecast plan minus forecast output over the horizon. Negative means shortfall.",
+      "Interval and period probability are empirical from backtest residuals, not a calibrated predictive distribution.",
+      "Future operational inputs (downtime, weather, blasting, rainfall) are scenario assumptions, so the forecast is conditional on them.",
+      "... 3 more item(s) omitted"
+    ],
+    "source": "memory"
+  }
+}

@@ -5,6 +5,32 @@ import { ValidationReportView } from "@/components/data/ValidationReportView";
 import { ApiError, apiUpload } from "@/lib/api";
 import type { DatasetDetail, ProductionSchema, ValidationReport } from "@/lib/types";
 
+type Kind = "production" | "drillholes" | "exploration_zones";
+
+const KIND_OPTIONS: { value: Kind; label: string; accept: string; extensions: string[]; help: string }[] = [
+  {
+    value: "production",
+    label: "Production records (CSV)",
+    accept: ".csv,text/csv",
+    extensions: [".csv"],
+    help: "Daily planned and actual tonnes per mine and zone. Required columns are listed in the contract below.",
+  },
+  {
+    value: "drillholes",
+    label: "Drillhole results (CSV)",
+    accept: ".csv,text/csv",
+    extensions: [".csv"],
+    help: "Columns: hole_id, zone_id, lon, lat, depth_m, mn_pct (0 to 60 % Mn). Grades are not verified by MineMind.",
+  },
+  {
+    value: "exploration_zones",
+    label: "Exploration zones (GeoJSON)",
+    accept: ".geojson,.json,application/geo+json,application/json",
+    extensions: [".geojson", ".json"],
+    help: "FeatureCollection of Polygon features in WGS84 (lon, lat), each with a unique zone_id. Optional: name, host_unit_mapped (true/false).",
+  },
+];
+
 type Props = {
   schema: ProductionSchema | null;
   onStored: (dataset: DatasetDetail) => void;
@@ -13,8 +39,10 @@ type Props = {
 export function UploadForm({ schema, onStored }: Props) {
   const inputId = useId();
   const nameId = useId();
+  const kindId = useId();
   const descId = useId();
   const fileRef = useRef<HTMLInputElement>(null);
+  const [kind, setKind] = useState<Kind>("production");
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
   const [busy, setBusy] = useState(false);
@@ -22,6 +50,7 @@ export function UploadForm({ schema, onStored }: Props) {
   const [report, setReport] = useState<ValidationReport | null>(null);
   const [failure, setFailure] = useState<string | null>(null);
   const maxMb = schema?.max_upload_mb ?? 5;
+  const option = KIND_OPTIONS.find((item) => item.value === kind) ?? KIND_OPTIONS[0]!;
 
   async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -30,11 +59,12 @@ export function UploadForm({ schema, onStored }: Props) {
     setReport(null);
     const file = fileRef.current?.files?.[0];
     if (!file) {
-      setFailure("Choose a CSV file first.");
+      setFailure("Choose a file first.");
       return;
     }
-    if (!file.name.toLowerCase().endsWith(".csv")) {
-      setFailure("Only .csv files are accepted for production records.");
+    const lower = file.name.toLowerCase();
+    if (!option.extensions.some((extension) => lower.endsWith(extension))) {
+      setFailure(`For this kind of data, use a ${option.extensions.join(" or ")} file.`);
       return;
     }
     if (file.size > maxMb * 1024 * 1024) {
@@ -45,12 +75,12 @@ export function UploadForm({ schema, onStored }: Props) {
     form.append("file", file);
     if (name.trim()) form.append("name", name.trim());
     if (description.trim()) form.append("description", description.trim());
-    form.append("kind", "production");
+    form.append("kind", kind);
 
     setBusy(true);
     try {
       const stored = await apiUpload<DatasetDetail>("/api/datasets", form);
-      setMessage(`Stored "${stored.name}" (${stored.row_count.toLocaleString("en-US")} rows). It is now the active dataset.`);
+      setMessage(`Stored "${stored.name}" (${stored.row_count.toLocaleString("en-US")} records).`);
       setName("");
       setDescription("");
       if (fileRef.current) fileRef.current.value = "";
@@ -61,6 +91,8 @@ export function UploadForm({ schema, onStored }: Props) {
         if (details && typeof details === "object" && "issues" in details) {
           setReport(details);
           setFailure("The file was not stored. Fix the problems listed below and upload again.");
+        } else if (error.details && typeof error.details === "object" && "issues" in (error.details as object)) {
+          setFailure(`${error.message} ${(error.details as { issues: string[] }).issues.slice(0, 5).join("; ")}`);
         } else {
           setFailure(error.message);
         }
@@ -75,23 +107,37 @@ export function UploadForm({ schema, onStored }: Props) {
   return (
     <form onSubmit={handleSubmit} className="space-y-4" aria-describedby={descId}>
       <div className="grid gap-4 md:grid-cols-2">
-        <div>
-          <label htmlFor={inputId} className="block text-sm font-medium text-ink-900">
-            Production CSV
-          </label>
-          <input
-            id={inputId}
-            ref={fileRef}
-            type="file"
-            accept=".csv,text/csv"
-            required
-            className="mt-1.5 block w-full rounded-md border border-line-strong bg-white p-2 text-sm file:mr-3 file:rounded file:border-0 file:bg-forest-800 file:px-3 file:py-1.5 file:text-sm file:font-medium file:text-white"
-          />
-          <p id={descId} className="mt-1.5 text-xs text-ink-500">
-            UTF-8 CSV with a header row. Maximum {maxMb} MB
-            {schema ? ` and ${schema.max_upload_rows.toLocaleString("en-US")} rows` : ""}. Blank actuals are kept as
-            pending; nothing is imputed.
-          </p>
+        <div className="space-y-3">
+          <div>
+            <label htmlFor={kindId} className="block text-sm font-medium text-ink-900">
+              Kind of data
+            </label>
+            <select
+              id={kindId}
+              value={kind}
+              onChange={(event) => setKind(event.target.value as Kind)}
+              className="mt-1.5 w-full rounded-md border border-line-strong bg-white px-3 py-2 text-sm"
+            >
+              {KIND_OPTIONS.map((item) => (
+                <option key={item.value} value={item.value}>
+                  {item.label}
+                </option>
+              ))}
+            </select>
+          </div>
+          <div>
+            <label htmlFor={inputId} className="block text-sm font-medium text-ink-900">
+              File
+            </label>
+            <input
+              id={inputId}
+              ref={fileRef}
+              type="file"
+              accept={option.accept}
+              required
+              className="mt-1.5 block w-full rounded-md border border-line-strong bg-white p-2 text-sm file:mr-3 file:rounded file:border-0 file:bg-forest-800 file:px-3 file:py-1.5 file:text-sm file:font-medium file:text-white"
+            />
+          </div>
         </div>
         <div className="space-y-3">
           <div>
@@ -121,6 +167,11 @@ export function UploadForm({ schema, onStored }: Props) {
           </div>
         </div>
       </div>
+      <p id={descId} className="text-xs text-ink-500">
+        {option.help} Maximum {maxMb} MB
+        {kind === "production" && schema ? ` and ${schema.max_upload_rows.toLocaleString("en-US")} rows` : ""}. Uploads
+        are labelled USER-PROVIDED and are not verified by MineMind AI.
+      </p>
 
       <div className="flex flex-wrap items-center gap-3">
         <button
@@ -130,7 +181,6 @@ export function UploadForm({ schema, onStored }: Props) {
         >
           {busy ? "Validating..." : "Validate and store"}
         </button>
-        <p className="text-xs text-ink-500">Uploaded data is labelled USER-PROVIDED and is not verified by MineMind AI.</p>
       </div>
 
       {message ? (

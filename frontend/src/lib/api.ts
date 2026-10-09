@@ -129,3 +129,26 @@ export async function apiDownload(path: string, params?: QueryParams): Promise<{
   const match = /filename="?([^";]+)"?/i.exec(disposition);
   return { blob: await response.blob(), filename: match?.[1] ?? "download" };
 }
+
+/** POST a JSON body and download the response (for example, a generated report). */
+export async function apiPostDownload(
+  path: string,
+  body: unknown,
+): Promise<{ blob: Blob; filename: string }> {
+  let response: Response;
+  try {
+    response = await fetch(buildUrl(path), {
+      method: "POST",
+      headers: { "Content-Type": "application/json", Accept: "text/html,application/json" },
+      body: JSON.stringify(body),
+    });
+  } catch {
+    throw new ApiError("The MineMind API could not be reached.", { status: 0, code: "network_error" });
+  }
+  if (!response.ok) {
+    throw await toApiError(response);
+  }
+  const disposition = response.headers.get("content-disposition") ?? "";
+  const match = /filename="?([^";]+)"?/i.exec(disposition);
+  return { blob: await response.blob(), filename: match?.[1] ?? "download" };
+}

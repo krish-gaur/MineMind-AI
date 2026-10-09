@@ -1,0 +1,248 @@
+{
+  "request": "GET /api/recommendations?zone_id=SYN-A-Z2",
+  "status": 200,
+  "response": {
+    "dataset": {
+      "id": "demo-synthetic-production-v1",
+      "name": "Synthetic demonstration production (SYN-A, SYN-B, SYN-C)",
+      "source_type": "synthetic",
+      "source_label": "SYNTHETIC DEMONSTRATION DATA",
+      "is_synthetic": true,
+      "banner": "SYNTHETIC DEMONSTRATION DATA - not MOIL operational records. Forecasts and risk bands illustrate the workflow only.",
+      "date_max": "2026-10-30",
+      "provenance": {
+        "source_type": "synthetic",
+        "label": "SYNTHETIC DEMONSTRATION DATA",
+        "provider": "MineMind AI synthetic generator",
+        "description": "Deterministic daily production records for fictional mines SYN-A, SYN-B and SYN-C. Planned and actual tonnes, equipment downtime, weather and blasting delays, and rainfall are generated from simple, documented rules.",
+        "url": null,
+        "licence": "Not applicable (synthetic data generated for this demonstration).",
+        "attribution": null,
+        "timestamp": "2026-10-09T04:36:15.753609Z",
+        "limitations": [
+          "Not MOIL operational data and not calibrated to any real mine.",
+          "Relationships between delays and output are designed into the generator; associations found in this dataset describe the generator, not real operations.",
+          "Rainfall is synthetic here. Enrich the dataset with a public rainfall series to replace it.",
+          "... 1 more item(s) omitted"
+        ]
+      }
+    },
+    "scope": {
+      "mine_id": null,
+      "zone_id": "SYN-A-Z2",
+      "label": "Zone SYN-A-Z2",
+      "key": "ALL__SYN-A-Z2"
+    },
+    "as_of": "2026-09-30",
+    "window_days": 28,
+    "recommendations": [
+      {
+        "id": "REC-FORECAST-RECOVERY",
+        "title": "Prepare a recovery plan for the forecast shortfall",
+        "priority": "high",
+        "category": "planning",
+        "zone_id": null,
+        "summary": "The forecast is 23.8% below plan over the next 30 days (HIGH risk band).",
+        "reasoning": "The forecast gap is what the operation should expect if current conditions continue. A recovery plan shows how much daily uplift the plan would need.",
+        "suggested_actions": [
+          "Decide whether the plan or the operating assumptions should change before the period starts.",
+          "Check which zones could add about 208 t per day, the size of the forecast gap (6,242 t over 30 days), before the plan itself is changed.",
+          "Re-run the forecast after each week of actuals to check whether the gap is closing."
+        ],
+        "evidence": [
+          {
+            "metric": "Forecast output",
+            "value": 19965.7,
+            "unit": "t",
+            "period": "2026-10-01 to 2026-10-30",
+            "value_kind": "forecast"
+          },
+          {
+            "metric": "Planned tonnes",
+            "value": 26208.0,
+            "unit": "t",
+            "period": "2026-10-01 to 2026-10-30",
+            "value_kind": "measured"
+          },
+          {
+            "metric": "Expected net gap",
+            "value": -6242.3,
+            "unit": "t",
+            "period": "2026-10-01 to 2026-10-30",
+            "value_kind": "estimate"
+          },
+          "... 1 more item(s) omitted"
+        ],
+        "expected_impact": {
+          "status": "estimated",
+          "value_t": 6242.0,
+          "unit": "t",
+          "basis": "Arithmetic on the forecast: the net gap over 30 days divided by 30 days gives an uplift of 208 t per day (23.8% of average daily plan). This is the size of the gap, not a forecast of what an action would recover."
+        },
+        "confidence": {
+          "level": "low",
+          "reasons": [
+            "30 records informed this rule.",
+            "Rule thresholds are policy choices, not learned parameters."
+          ]
+        },
+        "limitations": [
+          "The forecast assumes operational inputs stay at their trailing averages.",
+          "The interval is empirical from backtest windows; see the risk page."
+        ],
+        "value_kind": "rule_based"
+      },
+      {
+        "id": "REC-PROD-DEVIATION",
+        "title": "Investigate the persistent production shortfall against plan",
+        "priority": "high",
+        "category": "production",
+        "zone_id": null,
+        "summary": "Attainment is 76.5% against a 97% target, and 100% of matched days were below plan.",
+        "reasoning": "A shortfall on most days, rather than on a few outliers, suggests the plan is out of step with demonstrated output or that a common constraint is being missed.",
+        "suggested_actions": [
+          "Hold a daily plan-versus-actual review with a root-cause code for every shortfall day.",
+          "Test whether the plan is achievable: compare it with the trailing 28-day output by zone.",
+          "Start with the zone that contributes most of the gap (see the zone-concentration recommendation, if any)."
+        ],
+        "evidence": [
+          {
+            "metric": "Attainment",
+            "value": 76.5,
+            "unit": "%",
+            "period": "2026-09-03 to 2026-09-30",
+            "value_kind": "measured"
+          },
+          {
+            "metric": "Gap to plan on matched days",
+            "value": -5050.0,
+            "unit": "t",
+            "period": "2026-09-03 to 2026-09-30",
+            "value_kind": "measured"
+          },
+          {
+            "metric": "Days below plan",
+            "value": 100.0,
+            "unit": "%",
+            "period": "2026-09-03 to 2026-09-30",
+            "value_kind": "measured"
+          },
+          "... 1 more item(s) omitted"
+        ],
+        "expected_impact": {
+          "status": "not_estimated",
+          "value_t": null,
+          "unit": "t",
+          "basis": "Closing the gap depends on which causes the review finds, so no impact is estimated."
+        },
+        "confidence": {
+          "level": "low",
+          "reasons": [
+            "28 records informed this rule.",
+            "Rule thresholds are policy choices, not learned parameters."
+          ]
+        },
+        "limitations": [
+          "Gap is measured on matched days only. Pending days are excluded."
+        ],
+        "value_kind": "rule_based"
+      },
+      {
+        "id": "REC-EQUIP-SYN-A-Z2",
+        "title": "Review recurring equipment downtime in zone SYN-A-Z2",
+        "priority": "medium",
+        "category": "maintenance",
+        "zone_id": "SYN-A-Z2",
+        "summary": "43% of zone-days in the last 28 days had more than 8 hours of equipment downtime.",
+        "reasoning": "Repeated heavy-downtime days point to a recurring equipment or maintenance problem rather than one-off failures, and they are a material constraint on output in this zone.",
+        "suggested_actions": [
+          "Pull the breakdown log for SYN-A-Z2 for the last 90 days and group failures by equipment and cause.",
+          "Check whether repeated failures share a component, operator shift or maintenance interval.",
+          "Agree a preventive maintenance or spares plan for the top recurring cause before the next monsoon."
+        ],
+        "evidence": [
+          {
+            "metric": "Heavy-downtime zone-days",
+            "value": 12,
+            "unit": "days",
+            "period": "2026-09-03 to 2026-09-30",
+            "value_kind": "measured"
+          },
+          {
+            "metric": "Share of zone-days above threshold",
+            "value": 42.9,
+            "unit": "%",
+            "period": "2026-09-03 to 2026-09-30",
+            "value_kind": "measured"
+          },
+          {
+            "metric": "Mean equipment downtime",
+            "value": 7.26,
+            "unit": "h per zone-day",
+            "period": "2026-09-03 to 2026-09-30",
+            "value_kind": "measured"
+          },
+          "... 1 more item(s) omitted"
+        ],
+        "expected_impact": {
+          "status": "estimated",
+          "value_t": 1589.0,
+          "unit": "t",
+          "basis": "Mean output on normal-downtime days minus heavy-downtime days in this zone's history (132 t per day), times the 12 heavy day(s) in the window. This is an association in the data, not a measured effect of removing downtime."
+        },
+        "confidence": {
+          "level": "low",
+          "reasons": [
+            "28 records informed this rule.",
+            "Rule thresholds are policy choices, not learned parameters."
+          ]
+        },
+        "limitations": [
+          "The dataset does not record failure causes or equipment IDs.",
+          "Output differences are associations and may reflect other conditions on heavy-downtime days."
+        ],
+        "value_kind": "rule_based"
+      },
+      "... 1 more item(s) omitted"
+    ],
+    "rules": [
+      {
+        "rule_id": "data_freshness",
+        "title": "Stale data",
+        "fired": false,
+        "reason": "Data freshness is within the threshold.",
+        "checks": []
+      },
+      {
+        "rule_id": "equipment_recurrence",
+        "title": "Recurring equipment downtime",
+        "fired": true,
+        "reason": "43% of zone-days in the last 28 days had more than 8 hours of equipment downtime.",
+        "checks": [
+          {
+            "zone_id": "SYN-A-Z2",
+            "heavy_day_share_pct": 42.9,
+            "days": 28
+          }
+        ]
+      },
+      {
+        "rule_id": "production_deviation",
+        "title": "Persistent production shortfall",
+        "fired": true,
+        "reason": "Attainment is 76.5% against a 97% target, and 100% of matched days were below plan.",
+        "checks": [
+          {
+            "attainment_pct": 76.5,
+            "days_below_plan_pct": 100.0
+          }
+        ]
+      },
+      "... 6 more item(s) omitted"
+    ],
+    "notes": [
+      "Each recommendation cites the evidence that triggered it. Rules with no trigger are listed under rules checked.",
+      "Expected impacts marked 'estimated' are arithmetic on the data and are not causal effects."
+    ]
+  }
+}

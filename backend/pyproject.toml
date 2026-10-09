@@ -28,6 +28,8 @@ ignore = [
 [tool.ruff.lint.per-file-ignores]
 # Test fixtures contain long GeoJSON and CSV literals; wrapping them would hide the data.
 "tests/*" = ["B011", "E501"]
+# The report stylesheet is embedded CSS; compact rules are clearer than wrapped ones.
+"app/domain/reports.py" = ["E501"]
 
 [tool.mypy]
 python_version = "3.11"

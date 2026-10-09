@@ -1,6 +1,6 @@
-# Repository audit and implementation plan
+# Repository audit and implementation record
 
-Audit date: 2026-10-09 (sandbox clock, UTC). Branch: `arena/9566b465-minemind-ai`, base `f5c1150` on `main`.
+Audit date: 2026-10-09 (sandbox clock, UTC). Branch `arena/9566b465-minemind-ai`, base commit `f5c1150` on `main`.
 
 ## 1. What the repository contained
 
@@ -10,58 +10,70 @@ Audit date: 2026-10-09 (sandbox clock, UTC). Branch: `arena/9566b465-minemind-ai
 | Application code | None. No frontend, no backend, no API routes, no models, no data files. |
 | Dependencies | No `package.json`, `requirements*.txt`, `pyproject.toml` or lockfile. |
 | Configuration | No environment variables, no `.env.example`, no CORS, no deployment files. |
-| Tests / CI | None. |
+| Tests and CI | None. |
 | Documentation | README only. |
 | Remote | Public repository `krish-gaur/MineMind-AI`, no description, default branch `main`. |
 
-**Conclusion.** There was no existing working feature to preserve and nothing broken to repair. The
-application was built from scratch inside the existing repository. No other copy of the project
-exists on this machine (searched `/home/user` and the filesystem).
+**Conclusion.** There was no working feature to preserve and nothing broken to repair. No other copy of the project exists on this machine (searched `/home/user` and the filesystem). The application was built from scratch inside the existing repository.
 
 ## 2. Environment and network constraints (verified in this sandbox)
 
-* Toolchain: Node 22.22.3, npm 10.9.8, Python 3.11.2, git 2.39.5, gh 2.23.0. No Docker, no PostgreSQL, no system browser.
+* Toolchain: Node 22.22.3, npm 10.9.8, Python 3.11.2, git 2.39.5, gh 2.23.0. No Docker, no PostgreSQL, no system browser, no PowerShell.
 * Reachable: `registry.npmjs.org`, `pypi.org`, `github.com`, `api.github.com`.
-* **Not reachable (connection failed):** Copernicus Data Space catalogue, Element 84 Earth Search, Open-Meteo
-  (forecast and archive), OpenFreeMap tiles, the MapLibre demo style, Google Fonts, Nominatim, AWS S3 (Sentinel COGs).
+* **Not reachable (connection failed):** Copernicus Data Space catalogue, Element 84 Earth Search, Open-Meteo (forecast and archive), OpenFreeMap tiles, MapLibre demo style, Google Fonts, Nominatim, AWS S3 (Sentinel COGs).
 
 **Consequences**
 
-1. Live satellite and weather calls cannot be exercised from this sandbox. Their clients are tested with
-   mocked HTTP transports, and every such feature shows an explicit "unavailable" state when the service is unreachable.
-2. Map basemaps from third-party tile hosts cannot be loaded here. The map uses a bundled public-domain
-   outline (Natural Earth via `world-atlas`) so it works offline; an online style is optional via env.
-3. Google-hosted fonts are replaced by self-hosted `@fontsource` packages, so builds do not depend on Google.
+1. Live satellite and rainfall calls could not be exercised. Their clients are tested with mocked transports, and every such panel shows an explicit "unavailable" state. The recorded sample is in `docs/samples/satellite_unavailable_in_sandbox.json`.
+2. Third-party map tiles could not be loaded. The map uses a bundled public-domain outline, so it works offline. An online style is optional through an environment variable.
+3. Google-hosted fonts are replaced by `@fontsource` packages, so the build does not depend on Google.
+4. A headless Chromium was installed from npm (`@sparticuz/chromium`) outside the repository, to take screenshots for visual review. It is not part of the project.
 
-## 3. Risks found during the audit and how they are handled
+## 3. Risks found during the audit and how each was handled
 
 | Risk | Handling |
 | --- | --- |
-| No real MOIL data is available. | All production, geology and drilling data is **synthetic** and labelled SYNTHETIC on every surface, in exports and in reports. No boundaries, drilling results, reserves or accuracy figures are invented. |
-| A "prospectivity" score could be mistaken for a reserve estimate. | Exploration output is an *index* over stated evidence classes, gated by evidence sufficiency, and always labelled "not a reserve estimate". |
-| Rule-based scores presented as trained models. | Value types are explicit: `measured`, `forecast`, `probability`, `estimate`, `scenario`, `rule_based`, `index`. Policy thresholds are listed in `backend/app/domain/policy.py`. |
-| Data leakage in forecasting. | Features at day *t* use only information up to *t-1*, plus the plan for *t*. Tests check this directly. Time-based split, no shuffling. |
-| Upload abuse (size, type, path). | Size limit enforced while reading, `.csv` only, filenames reduced to a safe base name and never used as paths, dataset IDs validated against a strict pattern. |
-| Stack traces leaking to clients. | Global handler returns the error envelope with a request id; traces are logged server-side only. |
-| CORS misconfiguration on Vercel↔Render. | Origins come from `CORS_ORIGINS` (and an optional regex for previews). Default deployment uses a same-origin proxy, so no CORS is needed. |
-| Ephemeral filesystem on Render. | Demo data is regenerated deterministically at startup. Uploads persist only if `DATA_DIR` is on a persistent disk (documented). |
-| npm 10 peer-resolution crash with vitest 4 optional peers. | `.npmrc` sets `legacy-peer-deps=true`; the explicit dependency list is pinned. Verified with `npm ls`. |
-| ESLint 10 incompatible with `eslint-plugin-react`/`-import`/`-jsx-a11y` peer ranges used by `eslint-config-next` 16.4. | ESLint pinned to 9.39.x (still supported by the plugins). |
+| No MOIL data is available. | All production, geology, drillhole and boundary data is **synthetic**, fictional (`SYN-*`) and labelled SYNTHETIC on every screen, in every export and in every report. Nothing is presented as a reserve, resource, drilling result, satellite observation or measured accuracy. |
+| A prospectivity score could be read as a reserve estimate. | Exploration output is an index over evidence classes, gated on sufficiency, and labelled as not a probability and not a reserve estimate. |
+| Rule-based outputs presented as trained models. | Value types are explicit (`measured`, `forecast`, `probability`, `estimate`, `scenario`, `rule_based`, `index`). Thresholds live in `backend/app/domain/policy.py`. |
+| Data leakage in forecasting. | Features for day *t* use only earlier information (plus the plan for *t*). Tests perturb targets, same-day values and future values, and check that features do not move. |
+| Upload abuse (size, type, path). | Size enforced while reading; `.csv` and `.geojson`/`.json` only; filenames reduced to a safe base name and never used as paths; dataset ids matched against a strict pattern. |
+| Stack traces reaching clients. | A global handler returns the error envelope with a request id. Traces are logged on the server only. |
+| CORS misconfiguration between Vercel and Render. | Origins come from `CORS_ORIGINS`, plus an optional regex for previews. The default deployment uses a same-origin proxy, so CORS is not needed. |
+| Ephemeral filesystem on Render. | Demo data is regenerated deterministically at startup. Uploads persist only on a persistent disk (documented). |
+| npm 10 peer-resolution crash with vitest 4's optional peers. | `frontend/.npmrc` sets `legacy-peer-deps=true`; explicit dependencies are pinned. |
+| ESLint 10 is incompatible with `eslint-plugin-react`, `-import` and `-jsx-a11y`, which `eslint-config-next` depends on. | ESLint is pinned to 9.39.x, which all of them support. |
+| jsdom pulled in a native `canvas` optional peer that broke installs. | Tests use happy-dom instead. |
+| Google Fonts unreachable during build. | `@fontsource` packages. |
+| Map container collapsed to zero height. | MapLibre's own stylesheet sets `position: relative`, which overrode an absolute-positioned container. Fixed with a sized wrapper; verified in a browser. |
+| Zones coloured by status never received their status. | The zone geometry carries no status; it is now copied from the exploration result before rendering. Verified in a browser. |
+| "Recoverable output" wording overstated what the arithmetic shows. | Reworded to describe the gap and the uplift it implies. |
+| YAML double-quote escaping turned `\.` into `\\.` in the CORS regex. | Single-quoted in `render.yaml`; regex checked against a preview host and a foreign host. |
+| Recommendations' "as of" date moved back when actuals were missing, hiding the gap. | Windows end on the last day with any recorded value; freshness uses the last actual. Tested. |
 
-## 4. Implementation plan (priority order)
+## 4. Implementation record (phase by phase)
 
-| Priority | Item | Phase | Status at time of writing |
+| Phase | Scope | Status | Evidence |
 | --- | --- | --- | --- |
-| P0 | Repo hygiene: `.gitignore`, audit document, layout | 0 | Done |
-| P0 | Backend API foundation: config, errors, logging, health/readiness, CORS | 1 | Done, tested |
-| P0 | Production CSV contract, validation, synthetic generator, dataset registry | 2 | Done, tested |
-| P0 | Executive overview computed from data | 1 | Done, tested |
-| P1 | Forecasting: baselines, leakage-safe features, time-based backtest, save/reload | 3 | In progress |
-| P1 | Shortfall risk: classifier, expected net gap, transparent bands | 3 | Pending |
-| P1 | Recommendations: rule-driven, evidence-backed, impact flagged as estimated or not estimated | 4 | Pending |
-| P2 | MapLibre geospatial view, Sentinel-2 scene search and Open-Meteo rainfall (live calls mocked here) | 5 | Pending |
-| P2 | Exploration zone ranking gated by evidence; drillhole demo with synthetic labels | 5 | Pending |
-| P2 | Reports (HTML and JSON) distinguishing measured/forecast/estimate/synthetic | 6 | Pending |
-| P3 | Deployment configs (Vercel, Render blueprint), CI workflow, runbooks, demo script | 6 | Pending |
+| 0 | Audit, plan, network probe, repository hygiene | Done | This document; `.gitignore`. |
+| 1 | Backend foundation (config, errors, logs, health, readiness, CORS), executive overview, frontend shell | Done | Backend and frontend tests; overview screenshots. |
+| 2 | Production CSV contract and validation, synthetic generator, dataset registry, data page | Done | Validation, synthetic and dataset API tests. |
+| 3 | Forecasting (baselines, backtest, MAE/RMSE, bootstrap, save/reload), shortfall risk, classifier, forecast and risk pages | Done | Leakage, split, baseline, metric, persistence and API tests; page screenshots. |
+| 4 | Recommendations (eight rules, evidence, impact labels, rules checked) and page | Done | Designed-data tests with exact arithmetic; page screenshot. |
+| 5 | Geospatial (MapLibre, offline basemap), exploration index with gates, GeoJSON and drillhole ingestion, keyless Copernicus and Open-Meteo clients | Done, with live calls unverified here | Gating and ingestion tests; mocked-transport tests for every client outcome; map screenshot. |
+| 6 | HTML and JSON reports, documentation, deployment files, CI workflow | Done | Report tests; the docs in this folder; `render.yaml`; `.github/workflows/ci.yml`. |
 
-Each row is verified by tests and by the lint, type and build commands recorded in `README.md`.
+Each row is backed by commands and their real outputs in [`TEST_REPORT.md`](TEST_REPORT.md).
+
+## 5. Decisions taken during the build
+
+* **Gradient boosting is the forecast model; ridge is a benchmark.** The model was fixed before the backtest. On the all-mines scope ridge had lower backtest MAE. The verdict says so and the forecast is not swapped.
+* **Material-shortfall target (below 95% of plan)** for the classifier. The strict "below plan" target was almost always true in the synthetic data (base rate around 99%), so its AUC was meaningless. The tolerance is policy and is shown in the UI.
+* **Interval for the net gap** uses every backtest window of the same length, with at least 70% of days present, rather than only complete windows. Strict windows left none for the all-mines scope.
+* **HTML reports are self-contained and printable; PDF is not implemented.** This keeps the dependency list small.
+* **Shapely is used**, for geometry validity and area. GeoPandas and GDAL were rejected because of their binary weight on free hosting.
+* **Python dependencies are pinned** exactly. Node dependencies come from a committed lockfile.
+
+## 6. Post-build status of this audit
+
+Nothing in this audit is left unfixed except the items listed as not verified or not implemented in `README.md` ("Limitations and incomplete features") and in `TEST_REPORT.md` ("What was not verified").

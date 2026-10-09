@@ -1,0 +1,18 @@
+{
+  "request": "GET /api/overview?mine_id=NOPE",
+  "status": 422,
+  "response": {
+    "error": {
+      "code": "validation_failed",
+      "message": "Mine 'NOPE' is not in this dataset.",
+      "request_id": "6c0e53678e6a43139a76919ef6d4a003",
+      "details": {
+        "valid_mines": [
+          "SYN-A",
+          "SYN-B",
+          "SYN-C"
+        ]
+      }
+    }
+  }
+}

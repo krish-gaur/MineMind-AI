@@ -1,0 +1,379 @@
+{
+  "request": "GET /api/forecast?zone_id=SYN-A-Z2&horizon_days=30",
+  "status": 200,
+  "response": {
+    "dataset": {
+      "id": "demo-synthetic-production-v1",
+      "name": "Synthetic demonstration production (SYN-A, SYN-B, SYN-C)",
+      "source_type": "synthetic",
+      "source_label": "SYNTHETIC DEMONSTRATION DATA",
+      "is_synthetic": true,
+      "banner": "SYNTHETIC DEMONSTRATION DATA - not MOIL operational records. Forecasts and risk bands illustrate the workflow only.",
+      "date_max": "2026-10-30",
+      "provenance": {
+        "source_type": "synthetic",
+        "label": "SYNTHETIC DEMONSTRATION DATA",
+        "provider": "MineMind AI synthetic generator",
+        "description": "Deterministic daily production records for fictional mines SYN-A, SYN-B and SYN-C. Planned and actual tonnes, equipment downtime, weather and blasting delays, and rainfall are generated from simple, documented rules.",
+        "url": null,
+        "licence": "Not applicable (synthetic data generated for this demonstration).",
+        "attribution": null,
+        "timestamp": "2026-10-09T04:36:15.753609Z",
+        "limitations": [
+          "Not MOIL operational data and not calibrated to any real mine.",
+          "Relationships between delays and output are designed into the generator; associations found in this dataset describe the generator, not real operations.",
+          "Rainfall is synthetic here. Enrich the dataset with a public rainfall series to replace it.",
+          "... 1 more item(s) omitted"
+        ]
+      }
+    },
+    "scope": {
+      "mine_id": null,
+      "zone_id": "SYN-A-Z2",
+      "label": "Zone SYN-A-Z2",
+      "key": "ALL__SYN-A-Z2"
+    },
+    "model": {
+      "name": "Gradient boosting regressor (scikit-learn HistGradientBoosting) with plan-based shortfall classifier",
+      "regressor": "Gradient boosting regressor (scikit-learn HistGradientBoosting)",
+      "classifier": "Logistic regression for P(actual < plan) on a day",
+      "value_kind": "forecast",
+      "source": "loaded",
+      "model_version": "forecast-v1",
+      "fingerprint": "65d47f62bf0af36823cac2cee651ed0a",
+      "trained_at": "2026-10-09T04:36:26+00:00",
+      "trained_on": {
+        "labelled_days": 1230,
+        "first_day": "2023-04-08",
+        "last_actual_day": "2026-09-30"
+      },
+      "features": [
+        "plan",
+        "act_lag1",
+        "act_lag2",
+        "... 16 more item(s) omitted"
+      ],
+      "config": {
+        "test_days": 90,
+        "folds": 3,
+        "min_train_days": 180,
+        "horizon_days": 30
+      },
+      "versions": {
+        "scikit_learn": "1.9.1",
+        "numpy": "2.4.6",
+        "pandas": "3.0.6",
+        "model_version": "forecast-v1"
+      },
+      "random_state": 26009
+    },
+    "evaluation": {
+      "method": "Expanding-window backtest: 3 folds of 90 days, one-step-ahead, trained only on earlier days.",
+      "evaluation_start": "2026-01-04",
+      "evaluation_end": "2026-09-30",
+      "n_evaluated_days": 258,
+      "folds": [
+        {
+          "fold": 1,
+          "train_end": "2026-01-03",
+          "test_start": "2026-01-04",
+          "test_end": "2026-04-03",
+          "train_days": 972,
+          "test_days": 84,
+          "gradient_boosting_mae": 42.03882027259745
+        },
+        {
+          "fold": 2,
+          "train_end": "2026-04-03",
+          "test_start": "2026-04-04",
+          "test_end": "2026-07-02",
+          "train_days": 1056,
+          "test_days": 84,
+          "gradient_boosting_mae": 47.50104015013541
+        },
+        {
+          "fold": 3,
+          "train_end": "2026-07-02",
+          "test_start": "2026-07-03",
+          "test_end": "2026-09-30",
+          "train_days": 1140,
+          "test_days": 90,
+          "gradient_boosting_mae": 50.02821496739
+        }
+      ],
+      "models": [
+        {
+          "name": "gradient_boosting",
+          "label": "Gradient boosting regressor (scikit-learn HistGradientBoosting)",
+          "kind": "model",
+          "mae": 46.6,
+          "rmse": 62.62,
+          "n": 258
+        },
+        {
+          "name": "ridge",
+          "label": "Ridge regression (linear benchmark)",
+          "kind": "model",
+          "mae": 46.66,
+          "rmse": 60.43,
+          "n": 258
+        },
+        {
+          "name": "plan",
+          "label": "Plan (the planned tonnage is the forecast)",
+          "kind": "baseline",
+          "mae": 147.82,
+          "rmse": 168.0,
+          "n": 258
+        },
+        "... 3 more item(s) omitted"
+      ],
+      "per_fold": [
+        {
+          "fold": 1,
+          "n": 84,
+          "gradient_boosting_mae": 42.04,
+          "ridge_mae": 41.85,
+          "plan_mae": 139.2,
+          "persistence_mae": 155.01,
+          "seasonal_naive_7_mae": 110.61,
+          "moving_average_7_mae": 127.84
+        },
+        {
+          "fold": 2,
+          "n": 84,
+          "gradient_boosting_mae": 47.5,
+          "ridge_mae": 47.01,
+          "plan_mae": 135.34,
+          "persistence_mae": 145.17,
+          "seasonal_naive_7_mae": 72.2,
+          "moving_average_7_mae": 112.07
+        },
+        {
+          "fold": 3,
+          "n": 90,
+          "gradient_boosting_mae": 50.03,
+          "ridge_mae": 50.84,
+          "plan_mae": 167.51,
+          "persistence_mae": 128.65,
+          "seasonal_naive_7_mae": 81.27,
+          "moving_average_7_mae": 102.41
+        }
+      ],
+      "mae_by_fold": {
+        "gradient_boosting": {
+          "mean": 46.52,
+          "std": 3.33
+        },
+        "ridge": {
+          "mean": 46.57,
+          "std": 3.68
+        },
+        "plan": {
+          "mean": 147.35,
+          "std": 14.34
+        },
+        "persistence": {
+          "mean": 142.94,
+          "std": 10.88
+        },
+        "seasonal_naive_7": {
+          "mean": 88.03,
+          "std": 16.39
+        },
+        "moving_average_7": {
+          "mean": 114.11,
+          "std": 10.48
+        }
+      },
+      "best_baseline": "seasonal_naive_7",
+      "gap_to_best_baseline": {
+        "mae_difference": -41.26,
+        "ci95_low": -53.18,
+        "ci95_high": -26.64,
+        "skill_pct_vs_best_baseline": 46.97,
+        "bootstrap": "moving-block bootstrap, 1000 resamples, 7-day blocks"
+      },
+      "verdict": "beats_best_baseline",
+      "verdict_text": "The gradient boosting model has lower MAE than the best baseline, and the 95% interval for the difference excludes zero on this backtest.",
+      "residual_q10_t": -89.74,
+      "residual_q90_t": 52.76,
+      "model_labels": {
+        "gradient_boosting": "Gradient boosting regressor (scikit-learn HistGradientBoosting)",
+        "ridge": "Ridge regression (linear benchmark)"
+      }
+    },
+    "classification": {
+      "target": "Material shortfall day: actual below 95% of planned tonnes.",
+      "model": "Logistic regression (standardised features, median imputation)",
+      "n": 258,
+      "base_rate": 0.961,
+      "roc_auc": 0.836,
+      "brier": 0.033,
+      "brier_climatology": 0.0375,
+      "brier_skill_pct": 11.93,
+      "calibration": [
+        {
+          "bin": "(0.3594, 0.9437]",
+          "n": 52,
+          "mean_predicted": 0.835,
+          "observed_rate": 0.865
+        },
+        {
+          "bin": "(0.9437, 0.9808]",
+          "n": 51,
+          "mean_predicted": 0.967,
+          "observed_rate": 0.98
+        },
+        {
+          "bin": "(0.9808, 0.9933]",
+          "n": 52,
+          "mean_predicted": 0.988,
+          "observed_rate": 0.962
+        },
+        "... 2 more item(s) omitted"
+      ],
+      "verdict": "beats_base_rate",
+      "verdict_text": "AUC 0.84 and Brier skill +11.9% against a base-rate forecast on the backtest.",
+      "value_kind": "probability"
+    },
+    "backtest_history": [
+      {
+        "date": "2026-01-04",
+        "actual_t": 306.6,
+        "plan_t": 450.0,
+        "gradient_boosting_t": 310.3,
+        "ridge_t": 268.1,
+        "seasonal_naive_7_t": 453.6,
+        "shortfall_probability": 1.0
+      },
+      {
+        "date": "2026-01-05",
+        "actual_t": 575.8,
+        "plan_t": 900.0,
+        "gradient_boosting_t": 635.2,
+        "ridge_t": 646.0,
+        "seasonal_naive_7_t": 858.6,
+        "shortfall_probability": 1.0
+      },
+      {
+        "date": "2026-01-06",
+        "actual_t": 489.5,
+        "plan_t": 900.0,
+        "gradient_boosting_t": 587.8,
+        "ridge_t": 618.4,
+        "seasonal_naive_7_t": 795.8,
+        "shortfall_probability": 1.0
+      },
+      "... 255 more item(s) omitted"
+    ],
+    "forecast": {
+      "requested_days": 30,
+      "forecast_days": 30,
+      "truncated_reason": null,
+      "scenario_assumptions": {
+        "window_days": 28,
+        "values": {
+          "equipment_downtime_h": 7.26,
+          "weather_delay_h": 5.25,
+          "blasting_delay_h": 0.19,
+          "rainfall_mm": 7.78
+        },
+        "description": "Operational inputs for future days are held at their trailing 28-day means. This is a scenario, not a prediction of delays."
+      },
+      "days": [
+        {
+          "date": "2026-10-01",
+          "plan_t": 936.0,
+          "forecast_t": 600.7,
+          "interval_low_t": 510.9,
+          "interval_high_t": 653.4,
+          "shortfall_probability": 1.0
+        },
+        {
+          "date": "2026-10-02",
+          "plan_t": 936.0,
+          "forecast_t": 704.6,
+          "interval_low_t": 614.9,
+          "interval_high_t": 757.4,
+          "shortfall_probability": 0.999
+        },
+        {
+          "date": "2026-10-03",
+          "plan_t": 936.0,
+          "forecast_t": 701.8,
+          "interval_low_t": 612.1,
+          "interval_high_t": 754.6,
+          "shortfall_probability": 0.998
+        },
+        "... 27 more item(s) omitted"
+      ],
+      "totals": {
+        "plan_t": 26208.0,
+        "forecast_t": 19965.7,
+        "net_gap_t": -6242.3,
+        "net_gap_pct": -23.82,
+        "gap_interval_low_t": -7234.9,
+        "gap_interval_high_t": -6011.1,
+        "interval_basis": "empirical 10th-90th percentile of 204 overlapping 30-day backtest windows",
+        "period_shortfall_probability": 1.0,
+        "mean_daily_shortfall_probability": 0.999,
+        "start": "2026-10-01",
+        "end": "2026-10-30"
+      }
+    },
+    "drivers": {
+      "forecast_drivers": [
+        {
+          "feature": "plan",
+          "label": "Planned tonnes for the day",
+          "importance_t": 70.198
+        },
+        {
+          "feature": "downtime_lag1",
+          "label": "Equipment downtime, previous day",
+          "importance_t": 10.32
+        },
+        {
+          "feature": "act_lag2",
+          "label": "Actual, two days earlier",
+          "importance_t": 2.256
+        },
+        "... 5 more item(s) omitted"
+      ],
+      "forecast_drivers_method": "Permutation importance on the final backtest fold (held out from that fold's model): the increase in MAE when one feature is shuffled. Measures reliance, not causation.",
+      "shortfall_coefficients": [
+        {
+          "feature": "downtime_lag1",
+          "label": "Equipment downtime, previous day",
+          "standardised_coefficient": 2.5355,
+          "direction": "raises shortfall probability"
+        },
+        {
+          "feature": "att_roll7",
+          "label": "Attainment, last 7 days",
+          "standardised_coefficient": -0.8723,
+          "direction": "lowers shortfall probability"
+        },
+        {
+          "feature": "act_lag1",
+          "label": "Actual, previous day",
+          "standardised_coefficient": -0.8403,
+          "direction": "lowers shortfall probability"
+        },
+        "... 5 more item(s) omitted"
+      ],
+      "shortfall_method": "Standardised coefficients of the logistic shortfall model on all labelled days. Describe associations in this dataset, not causes."
+    },
+    "value_kinds": {
+      "forecast_t": "forecast",
+      "gap_t": "estimate",
+      "shortfall_probability": "probability",
+      "scenario_inputs": "scenario"
+    },
+    "notes": [
+      "Forecast values are model outputs. They are not measurements and are not guaranteed.",
+      "Backtest figures are out-of-sample for the periods shown; they say nothing about other periods."
+    ]
+  }
+}

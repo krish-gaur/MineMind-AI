@@ -1,0 +1,10 @@
+{
+  "request": "GET /api/health",
+  "status": 200,
+  "response": {
+    "status": "ok",
+    "version": "1.0.0",
+    "environment": "development",
+    "time": "2026-10-09T04:44:53.442141Z"
+  }
+}

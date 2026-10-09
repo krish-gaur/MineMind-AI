@@ -168,13 +168,16 @@ function OverviewContent({ data }: { data: OverviewResponse }) {
 
   return (
     <div className="mt-6 space-y-6">
-      {data.notes.length > 0 ? (
+      {/* The synthetic warning is already shown as a banner above; do not repeat it here. */}
+      {data.notes.filter((note) => !note.startsWith("SYNTHETIC DEMONSTRATION DATA")).length > 0 ? (
         <ul className="space-y-2 text-sm text-ink-700" aria-label="Notes on this view">
-          {data.notes.map((note) => (
-            <li key={note} className="rounded-md border border-line bg-surface px-4 py-2.5">
-              {note}
-            </li>
-          ))}
+          {data.notes
+            .filter((note) => !note.startsWith("SYNTHETIC DEMONSTRATION DATA"))
+            .map((note) => (
+              <li key={note} className="rounded-md border border-line bg-surface px-4 py-2.5">
+                {note}
+              </li>
+            ))}
         </ul>
       ) : null}
 

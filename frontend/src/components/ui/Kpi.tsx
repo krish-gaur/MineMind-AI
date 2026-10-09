@@ -34,7 +34,9 @@ export function KpiCard({ label, value, hint, tone = "neutral", valueKind, testI
     >
       <span aria-hidden="true" className={`absolute inset-y-0 left-0 w-1 ${ACCENT[tone]}`} />
       <p className="text-xs font-medium uppercase tracking-wide text-ink-500">{label}</p>
-      <p className={`tabular mt-2 font-mono text-2xl font-semibold ${VALUE_TONE[tone]}`}>{value}</p>
+      <p className={`tabular mt-2 whitespace-nowrap font-mono text-[1.2rem] font-semibold leading-tight 2xl:text-[1.45rem] ${VALUE_TONE[tone]}`}>
+        {value}
+      </p>
       <div className="mt-2 flex min-h-5 flex-wrap items-center gap-2">
         {hint ? <span className="text-xs text-ink-500">{hint}</span> : null}
         {valueKind ? <ValueKindBadge kind={valueKind} /> : null}

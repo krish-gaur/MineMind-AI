@@ -56,8 +56,8 @@ export default function DataPage() {
         <Card labelledBy="upload-title">
           <CardHeader
             id="upload-title"
-            title="Upload production records"
-            description="CSV in the production.v1 format. Errors block storage and are listed by file line."
+            title="Upload data"
+            description="Production records (CSV), drillhole results (CSV) or exploration zones (GeoJSON). Errors block storage and are listed by file line or feature."
           />
           <div className="p-5">
             {schema.error ? (
@@ -68,7 +68,7 @@ export default function DataPage() {
                 onStored={(stored: DatasetDetail) => {
                   setJustStored(stored.id);
                   reloadDatasets();
-                  selectDataset(stored.id);
+                  if (stored.kind === "production") selectDataset(stored.id);
                 }}
               />
             )}

@@ -41,6 +41,7 @@ export function DatasetList({ datasets }: { datasets: DatasetSummary[] }) {
         <thead className="bg-slate-100 text-xs uppercase tracking-wide text-ink-700">
           <tr>
             <th scope="col" className="px-4 py-2.5 font-semibold">Dataset</th>
+            <th scope="col" className="px-4 py-2.5 font-semibold">Kind</th>
             <th scope="col" className="px-4 py-2.5 font-semibold">Source</th>
             <th scope="col" className="px-4 py-2.5 text-right font-semibold">Rows</th>
             <th scope="col" className="px-4 py-2.5 font-semibold">Dates</th>
@@ -62,14 +63,19 @@ export function DatasetList({ datasets }: { datasets: DatasetSummary[] }) {
                   </p>
                   <p className="mt-0.5 font-mono text-xs text-ink-500">{dataset.id}</p>
                 </td>
+                <td className="px-4 py-3 text-xs text-ink-700">{KIND_LABEL[dataset.kind]}</td>
                 <td className="px-4 py-3">
                   <SourceBadge sourceType={dataset.source_type} />
                 </td>
                 <td className="tabular px-4 py-3 text-right">{formatNumber(dataset.row_count)}</td>
                 <td className="px-4 py-3 text-xs text-ink-700">
-                  {formatDate(dataset.date_min)} to {formatDate(dataset.date_max)}
+                  {dataset.date_min && dataset.date_max
+                    ? `${formatDate(dataset.date_min)} to ${formatDate(dataset.date_max)}`
+                    : "Not dated (no time series)"}
                   <span className="block text-ink-500">
-                    {dataset.mines.length} mine(s), {dataset.zones.length} zone(s)
+                    {dataset.kind === "production"
+                      ? `${dataset.mines.length} mine(s), ${dataset.zones.length} zone(s)`
+                      : `${dataset.zones.length} zone id(s)`}
                   </span>
                 </td>
                 <td className="px-4 py-3 text-xs text-ink-700">{validationLabel(dataset.validation_status)}</td>
@@ -110,6 +116,12 @@ export function DatasetList({ datasets }: { datasets: DatasetSummary[] }) {
     </div>
   );
 }
+
+const KIND_LABEL: Record<DatasetSummary["kind"], string> = {
+  production: "Production",
+  drillholes: "Drillholes",
+  exploration_zones: "Exploration zones",
+};
 
 function validationLabel(status: string | null): string {
   switch (status) {

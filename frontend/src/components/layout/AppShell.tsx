@@ -85,7 +85,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
             >
               {menuOpen ? "Close" : "Menu"}
             </button>
-            <Link href="/" className="font-semibold text-forest-900 lg:hidden">
+            <Link href="/" className="whitespace-nowrap font-semibold text-forest-900 lg:hidden">
               MineMind AI
             </Link>
             <div className="ml-auto flex min-w-0 items-center gap-3">

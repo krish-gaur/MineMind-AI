@@ -1,0 +1,80 @@
+{
+  "request": "POST /api/datasets  (multipart: file=bad.csv with a bad date and a negative plan)",
+  "status": 422,
+  "response": {
+    "error": {
+      "code": "validation_failed",
+      "message": "The dataset was not stored because it has validation errors. See details.",
+      "request_id": "16d583159f094e64b1f2b2f6a26972cd",
+      "details": {
+        "status": "invalid",
+        "schema_version": "production.v1",
+        "row_count": 2,
+        "issues": [
+          {
+            "severity": "error",
+            "code": "row_errors",
+            "message": "2 row(s) contain problems. Fix them in the source file and upload again.",
+            "affected_rows": 2,
+            "examples": [
+              "line 2: date '2026-13-40' is not a valid YYYY-MM-DD calendar date",
+              "line 3: planned_production_t must be >= 0"
+            ]
+          }
+        ],
+        "columns": [
+          {
+            "name": "date",
+            "present": true,
+            "required": true,
+            "unit": "YYYY-MM-DD",
+            "missing_count": 0,
+            "missing_pct": null,
+            "min": null,
+            "max": null,
+            "mean": null,
+            "outlier_count": 0,
+            "outlier_rule": null
+          },
+          {
+            "name": "mine_id",
+            "present": true,
+            "required": true,
+            "unit": "text",
+            "missing_count": 0,
+            "missing_pct": null,
+            "min": null,
+            "max": null,
+            "mean": null,
+            "outlier_count": 0,
+            "outlier_rule": null
+          },
+          {
+            "name": "zone_id",
+            "present": true,
+            "required": true,
+            "unit": "text",
+            "missing_count": 0,
+            "missing_pct": null,
+            "min": null,
+            "max": null,
+            "mean": null,
+            "outlier_count": 0,
+            "outlier_rule": null
+          },
+          "... 6 more item(s) omitted"
+        ],
+        "unknown_columns": [],
+        "date_min": null,
+        "date_max": null,
+        "series_count": 0,
+        "mines": [],
+        "zones": [],
+        "rows_with_actual": 0,
+        "rows_pending_actual": 0,
+        "missing_date_gaps": 0,
+        "generated_at": "2026-10-09T04:44:54.875330Z"
+      }
+    }
+  }
+}

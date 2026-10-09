@@ -473,14 +473,15 @@ def rule_forecast_gap(risk: dict[str, Any] | None) -> RuleResult:
         ),
         "suggested_actions": [
             "Decide whether the plan or the operating assumptions should change before the period starts.",
-            f"Identify up to {abs(net):,.0f} t of recoverable output across zones (about {uplift:,.0f} t per day).",
+            f"Check which zones could add about {uplift:,.0f} t per day, the size of the forecast gap "
+            f"({abs(net):,.0f} t over {days} days), before the plan itself is changed.",
             "Re-run the forecast after each week of actuals to check whether the gap is closing.",
         ],
         "evidence": [
             _evidence("Forecast output", expected["forecast_t"], "t", period, "forecast"),
             _evidence("Planned tonnes", expected["plan_t"], "t", period),
             _evidence("Expected net gap", net, "t", period, "estimate"),
-            _evidence("Risk band", band, "level", period, "rule_based"),
+            _evidence("Risk band", band, "band", period, "rule_based"),
         ],
         "expected_impact": {
             "status": "estimated",
