@@ -30,7 +30,7 @@ Say this first, every time: **the data is synthetic.** Every page shows the ambe
 ## 4. Forecast and backtest (3 min): `/forecast`
 
 * Scope: **All mines and zones**. Read the **verdict** first: the gradient boosting model beats the best baseline on this backtest, with a 95% interval for the difference that excludes zero.
-* Read the **model comparison**: plan, persistence, seasonal naive and moving average are the baselines. Ridge is a linear benchmark. Point out that the baselines are scored on the same days.
+* Read the **model comparison**: plan, persistence, seasonal naive and moving average are the baselines. Ridge is a linear benchmark. Point out that the baselines are scored on the same days, and say plainly that ridge has lower error than gradient boosting on 7 of the 9 scopes. The product reports this rather than hiding it, and the choice of default is an open decision.
 * Explain **leakage prevention**: each day is predicted with information dated before it. The test suite proves that same-day operational values are not used.
 * Look at the **forward forecast** and its scenario box. The future downtime and weather are assumptions held at trailing means, and the page says so.
 * Open the **classifier** card. The "material shortfall" target is "actual below 95% of plan". Its AUC and Brier skill against the base rate are on the card, not implied.
