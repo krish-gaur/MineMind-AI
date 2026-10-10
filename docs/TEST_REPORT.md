@@ -2,6 +2,8 @@
 
 Build date: 2026-10-09 (sandbox clock, UTC). Branch `arena/9566b465-minemind-ai`. Every result below was produced by the command shown, in this sandbox, on the code as committed. Nothing here is a claim that a check passed without being run.
 
+Updated 2026-10-10: the GitHub Actions row was added once the workflow had genuinely run on GitHub; the earlier text said it had not been executed there, which was true when written and false afterwards.
+
 **Environment.** Debian 12 (Linux x86_64), 2 CPUs, 3.8 GiB RAM. Python 3.11.2 with a virtual environment at `backend/.venv`. Node 22.22.3, npm 10.9.8. HeadlessChrome 153.0.8010.0 (from `@sparticuz/chromium` 153.0.0, installed outside the repository) for browser checks.
 
 ## 1. Results at a glance
@@ -20,6 +22,7 @@ Build date: 2026-10-09 (sandbox clock, UTC). Branch `arena/9566b465-minemind-ai`
 | Runtime-only install | `pip install -r requirements.txt` in a fresh venv, then start the app | **imports OK; health ok; readiness `ready`; a forecast trains from an empty data directory** |
 | Browser smoke | headless Chromium loads every page | **0 console or page errors on `/`, `/forecast`, `/risk`, `/recommendations`, `/map`, `/exploration`, `/reports`, `/data`** |
 | API samples | requests against the running service | **12 responses recorded** in `docs/samples/` (one upload created, then deleted) |
+| GitHub Actions CI | `push` to this branch | **3 runs, all `success`** — `Backend (ruff, mypy, pytest)` 1m9s and `Frontend (lint, typecheck, test, build)` 31s on the latest run ([37886217669](https://github.com/krish-gaur/MineMind-AI/actions/runs/37886217669)) |
 
 ## 2. Backend tests by module
 
@@ -136,6 +139,6 @@ Stated plainly, so nobody mistakes an untested path for a tested one.
 * **Real data.** Every dataset is synthetic. No result describes a real mine.
 * **Cross-browser and devices.** Only headless Chromium on Linux. Every page at desktop width; the overview at phone width. Not tested on Firefox, Safari, Edge or real devices.
 * **Accessibility audit.** Semantic structure and labels were built in, and keyboard use of the zone list was considered, but no automated accessibility audit (for example axe) was run.
-* **GitHub Actions.** `.github/workflows/ci.yml` parses and runs the same commands as above, but the workflow itself was not executed on GitHub.
+* **GitHub Actions annotations (known, not failures).** The workflow *has* now run on GitHub and passed on all three pushes to this branch (see the table above), so it is no longer an unverified path. The runners do emit deprecation notices: `actions/checkout@v4`, `actions/setup-python@v5` and `actions/setup-node@v4` target Node.js 20 and are being forced onto Node.js 24, and `ubuntu-latest` migrates to Ubuntu 26 from 19 October 2026. Neither changed the result, but the action versions should be bumped before that runner migration.
 * **npm notices (known, not failures).** `eslint@9.39.5` is deprecated upstream; ESLint 9 is pinned because the plugins used by `eslint-config-next` do not yet support ESLint 10. `npm ls` reports an invalid optional peer for `picomatch@2.3.2` required by `fdir`; the install succeeds and nothing in the build uses that peer.
 * **Load and performance under concurrent use.** Not tested. Single-process, file-based storage.
