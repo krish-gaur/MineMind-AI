@@ -1,0 +1,30 @@
+# Render blueprint for the MineMind AI API.
+# Frontend (Next.js) is deployed on Vercel with Root Directory = frontend and BACKEND_URL set to this service's URL.
+services:
+  - type: web
+    name: minemind-api
+    runtime: python
+    rootDir: backend
+    plan: free
+    buildCommand: pip install -r requirements.txt && python -m app.cli generate-demo
+    startCommand: uvicorn app.main:app --host 0.0.0.0 --port $PORT
+    healthCheckPath: /api/health
+    envVars:
+      - key: PYTHON_VERSION
+        value: "3.11.9"
+      - key: APP_ENV
+        value: production
+      - key: LOG_LEVEL
+        value: INFO
+      - key: ENABLE_EXTERNAL_SERVICES
+        value: "true"
+      - key: MAX_UPLOAD_MB
+        value: "5"
+      - key: MAX_UPLOAD_ROWS
+        value: "50000"
+      - key: STALE_DATA_DAYS
+        value: "14"
+      - key: CORS_ORIGIN_REGEX
+        value: 'https://.*\.vercel\.app'
+      - key: CORS_ORIGINS
+        sync: false  # e.g. https://your-project.vercel.app (only needed for direct browser calls)

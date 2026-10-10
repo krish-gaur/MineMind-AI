@@ -1,0 +1,36 @@
+# ---- Python (backend) ----
+backend/.venv/
+venv/
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.coverage
+htmlcov/
+# Generated at runtime: synthetic demo data, user uploads, trained model artefacts, cached API responses
+backend/data_store/
+backend/artifacts/
+
+# ---- Node (frontend) ----
+frontend/node_modules/
+frontend/.next/
+frontend/out/
+frontend/coverage/
+*.tsbuildinfo
+
+# ---- Environment and secrets: never commit ----
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+.netrc
+.git-credentials
+
+# ---- Editors and OS ----
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+*.log

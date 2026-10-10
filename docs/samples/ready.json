@@ -1,0 +1,24 @@
+{
+  "request": "GET /api/ready",
+  "status": 200,
+  "response": {
+    "status": "ready",
+    "checks": [
+      {
+        "name": "storage",
+        "status": "ok",
+        "detail": "Data directory is writable."
+      },
+      {
+        "name": "demo_dataset",
+        "status": "ok",
+        "detail": "Synthetic demonstration dataset is registered."
+      },
+      {
+        "name": "external_services",
+        "status": "ok",
+        "detail": "Public satellite and weather services are enabled."
+      }
+    ]
+  }
+}

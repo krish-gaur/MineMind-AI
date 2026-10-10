@@ -1,0 +1,121 @@
+{
+  "request": "POST /api/datasets  (multipart: file=pilot.csv, name=Pilot extract)",
+  "status": 201,
+  "response": {
+    "id": "usr-20261009044454-68dd0c",
+    "kind": "production",
+    "name": "Pilot extract",
+    "description": "User-provided production records.",
+    "source_type": "user_provided",
+    "source_label": "USER-PROVIDED DATA (not verified by MineMind)",
+    "is_synthetic": false,
+    "deletable": true,
+    "created_at": "2026-10-09T04:44:54.840119Z",
+    "row_count": 2,
+    "date_min": "2026-09-01",
+    "date_max": "2026-09-02",
+    "mines": [
+      "SYN-A"
+    ],
+    "zones": [
+      "SYN-A-Z1"
+    ],
+    "mine_zones": {
+      "SYN-A": [
+        "SYN-A-Z1"
+      ]
+    },
+    "rows_with_actual": 1,
+    "rows_pending_actual": 1,
+    "validation_status": "valid_with_warnings",
+    "sha256": "ab3d6740ed673787ebeecb630eb1694aebccffda1b80a288b78c32ac614cc72c",
+    "provenance": {
+      "source_type": "user_provided",
+      "label": "USER-PROVIDED DATA (not verified by MineMind)",
+      "provider": "User upload",
+      "description": "Production records supplied by a user. MineMind AI has validated the schema and ranges but cannot verify that the values are correct.",
+      "url": null,
+      "licence": null,
+      "attribution": null,
+      "timestamp": "2026-10-09T04:44:54.840119Z",
+      "limitations": [
+        "Source authenticity and measurement quality are not verified by MineMind AI.",
+        "Results are only as reliable as the uploaded records."
+      ]
+    },
+    "validation": {
+      "status": "valid_with_warnings",
+      "schema_version": "production.v1",
+      "row_count": 2,
+      "issues": [
+        {
+          "severity": "warning",
+          "code": "pending_actuals",
+          "message": "Rows without an actual production value are treated as pending. They are excluded from actual-based KPIs and model training. No values were imputed.",
+          "affected_rows": 1,
+          "examples": []
+        }
+      ],
+      "columns": [
+        {
+          "name": "date",
+          "present": true,
+          "required": true,
+          "unit": "YYYY-MM-DD",
+          "missing_count": 0,
+          "missing_pct": 0.0,
+          "min": null,
+          "max": null,
+          "mean": null,
+          "outlier_count": 0,
+          "outlier_rule": null
+        },
+        {
+          "name": "mine_id",
+          "present": true,
+          "required": true,
+          "unit": "text",
+          "missing_count": 0,
+          "missing_pct": 0.0,
+          "min": null,
+          "max": null,
+          "mean": null,
+          "outlier_count": 0,
+          "outlier_rule": null
+        },
+        {
+          "name": "zone_id",
+          "present": true,
+          "required": true,
+          "unit": "text",
+          "missing_count": 0,
+          "missing_pct": 0.0,
+          "min": null,
+          "max": null,
+          "mean": null,
+          "outlier_count": 0,
+          "outlier_rule": null
+        },
+        "... 6 more item(s) omitted"
+      ],
+      "unknown_columns": [],
+      "date_min": "2026-09-01",
+      "date_max": "2026-09-02",
+      "series_count": 1,
+      "mines": [
+        "SYN-A"
+      ],
+      "zones": [
+        "SYN-A-Z1"
+      ],
+      "rows_with_actual": 1,
+      "rows_pending_actual": 1,
+      "missing_date_gaps": 0,
+      "generated_at": "2026-10-09T04:44:54.840119Z"
+    },
+    "validation_notes": [],
+    "original_filename": "pilot.csv",
+    "size_bytes": 245,
+    "generator": null
+  }
+}

@@ -1,0 +1,102 @@
+{
+  "request": "GET /api/datasets",
+  "status": 200,
+  "response": {
+    "datasets": [
+      {
+        "id": "demo-synthetic-production-v1",
+        "kind": "production",
+        "name": "Synthetic demonstration production (SYN-A, SYN-B, SYN-C)",
+        "description": "SYNTHETIC. Fictional mines and zones for demonstrating the workflow. Not MOIL operational records.",
+        "source_type": "synthetic",
+        "source_label": "SYNTHETIC DEMONSTRATION DATA",
+        "is_synthetic": true,
+        "deletable": false,
+        "created_at": "2026-10-09T04:36:15.753609Z",
+        "row_count": 6545,
+        "date_min": "2023-04-01",
+        "date_max": "2026-10-30",
+        "mines": [
+          "SYN-A",
+          "SYN-B",
+          "SYN-C"
+        ],
+        "zones": [
+          "SYN-A-Z1",
+          "SYN-A-Z2",
+          "SYN-B-E",
+          "... 2 more item(s) omitted"
+        ],
+        "mine_zones": {
+          "SYN-A": [
+            "SYN-A-Z1",
+            "SYN-A-Z2"
+          ],
+          "SYN-B": [
+            "SYN-B-E",
+            "SYN-B-W"
+          ],
+          "SYN-C": [
+            "SYN-C-C1"
+          ]
+        },
+        "rows_with_actual": 6322,
+        "rows_pending_actual": 223,
+        "validation_status": "valid_with_warnings",
+        "sha256": "3fd6bb04f15f3b362713b9f304492bf9d1f725d9d3bea43ca186de23346ad809"
+      },
+      {
+        "id": "demo-synthetic-drillholes-v1",
+        "kind": "drillholes",
+        "name": "Synthetic demonstration drillholes",
+        "description": "SYNTHETIC. Invented collars and Mn grades in the demonstration zones.",
+        "source_type": "synthetic",
+        "source_label": "SYNTHETIC DEMONSTRATION DATA",
+        "is_synthetic": true,
+        "deletable": false,
+        "created_at": "2026-10-09T04:36:15.997285Z",
+        "row_count": 22,
+        "date_min": null,
+        "date_max": null,
+        "mines": [],
+        "zones": [
+          "EZ-01",
+          "EZ-02",
+          "EZ-03",
+          "... 1 more item(s) omitted"
+        ],
+        "mine_zones": {},
+        "rows_with_actual": 0,
+        "rows_pending_actual": 0,
+        "validation_status": "valid",
+        "sha256": "2f168cc51abe3f44119e00c42dcc62c88e4b5e983492e058d58748c25f197b63"
+      },
+      {
+        "id": "demo-synthetic-exploration-zones-v1",
+        "kind": "exploration_zones",
+        "name": "Synthetic demonstration exploration zones",
+        "description": "SYNTHETIC. Six fictional zones in the demonstration area.",
+        "source_type": "synthetic",
+        "source_label": "SYNTHETIC DEMONSTRATION DATA",
+        "is_synthetic": true,
+        "deletable": false,
+        "created_at": "2026-10-09T04:36:15.997285Z",
+        "row_count": 6,
+        "date_min": null,
+        "date_max": null,
+        "mines": [],
+        "zones": [
+          "EZ-01",
+          "EZ-02",
+          "EZ-03",
+          "... 3 more item(s) omitted"
+        ],
+        "mine_zones": {},
+        "rows_with_actual": 0,
+        "rows_pending_actual": 0,
+        "validation_status": "valid",
+        "sha256": "a63ff10408cbd224a6d2d5e46c838fe258f5036f4128ac5f67c8d260b048dc5c"
+      }
+    ]
+  }
+}
