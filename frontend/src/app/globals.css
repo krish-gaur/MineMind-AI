@@ -1,0 +1,70 @@
+@import "tailwindcss";
+
+/* Design tokens: a calm, field-report palette (forest, paper, graphite) with
+   amber for caution and brick for shortfall. Chart colours are reused in SVG. */
+@theme {
+  --font-sans: "IBM Plex Sans", ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+  --font-mono: "IBM Plex Mono", ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+
+  --color-paper: #f6f4ee;
+  --color-surface: #ffffff;
+  --color-line: #dfdacd;
+  --color-line-strong: #c9c2b2;
+
+  --color-ink-900: #14191c;
+  --color-ink-700: #3b4348;
+  --color-ink-500: #5d656a;
+
+  --color-forest-950: #0b1f17;
+  --color-forest-900: #10291f;
+  --color-forest-800: #173a2c;
+  --color-forest-700: #1f4d3a;
+  --color-forest-500: #3e7d5f;
+  --color-forest-200: #cfe3d7;
+  --color-forest-50: #eef6f1;
+
+  --color-amber-900: #4d3208;
+  --color-amber-700: #7a5110;
+  --color-amber-500: #c98a1b;
+  --color-amber-100: #fbf0d9;
+  --color-amber-50: #fdf8ec;
+
+  --color-brick-800: #6f271b;
+  --color-brick-700: #8e2f21;
+  --color-brick-500: #b5483a;
+  --color-brick-100: #f8e3de;
+
+  --color-slate-500: #6f7980;
+  --color-slate-300: #b9c0c5;
+  --color-slate-100: #eceff1;
+}
+
+@layer base {
+  html {
+    -webkit-text-size-adjust: 100%;
+    text-rendering: optimizeLegibility;
+  }
+  body {
+    @apply bg-paper text-ink-900 font-sans antialiased;
+  }
+  :focus-visible {
+    outline: 2px solid var(--color-amber-500);
+    outline-offset: 2px;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+      scroll-behavior: auto !important;
+    }
+  }
+}
+
+@layer components {
+  .tabular {
+    font-variant-numeric: tabular-nums;
+  }
+}

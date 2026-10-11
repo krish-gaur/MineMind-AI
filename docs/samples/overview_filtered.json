@@ -1,0 +1,168 @@
+{
+  "request": "GET /api/overview?mine_id=SYN-A&start=2026-07-01&end=2026-09-30",
+  "status": 200,
+  "response": {
+    "dataset": {
+      "id": "demo-synthetic-production-v1",
+      "name": "Synthetic demonstration production (SYN-A, SYN-B, SYN-C)",
+      "source_type": "synthetic",
+      "source_label": "SYNTHETIC DEMONSTRATION DATA",
+      "is_synthetic": true,
+      "banner": "SYNTHETIC DEMONSTRATION DATA - not MOIL operational records. Figures show how the workflow behaves; they are not evidence of real production performance."
+    },
+    "filters": {
+      "start": "2026-07-01",
+      "end": "2026-09-30",
+      "mine_id": "SYN-A",
+      "zone_id": null
+    },
+    "empty": false,
+    "period": {
+      "start": "2026-07-01",
+      "end": "2026-09-30",
+      "days": 92,
+      "rows": 184,
+      "rows_with_actual": 183,
+      "rows_pending_actual": 1,
+      "series": 2
+    },
+    "kpis": {
+      "planned_t": 174771.5,
+      "actual_t": 147275.0,
+      "gap_t": -27496.5,
+      "variance_pct": -15.73,
+      "attainment_pct": 84.27,
+      "coverage_pct": 99.46,
+      "days_below_plan_pct": 98.36,
+      "equipment_downtime_h_total": 782.99,
+      "equipment_downtime_h_per_zone_day": 4.26,
+      "equipment_downtime_days_over_threshold_pct": 13.04,
+      "value_kind": "measured"
+    },
+    "constraints": [
+      {
+        "key": "weather_delay",
+        "label": "Weather delay",
+        "column": "weather_delay_h",
+        "total_hours": 1011.0,
+        "share_pct": 53.4,
+        "mean_hours_per_zone_day": 5.49,
+        "records": 184,
+        "threshold_hours": 6.0,
+        "days_over_threshold": 67,
+        "value_kind": "measured"
+      },
+      {
+        "key": "equipment_downtime",
+        "label": "Equipment downtime",
+        "column": "equipment_downtime_h",
+        "total_hours": 783.0,
+        "share_pct": 41.3,
+        "mean_hours_per_zone_day": 4.26,
+        "records": 184,
+        "threshold_hours": 8.0,
+        "days_over_threshold": 24,
+        "value_kind": "measured"
+      },
+      {
+        "key": "blasting_delay",
+        "label": "Blasting delay",
+        "column": "blasting_delay_h",
+        "total_hours": 100.8,
+        "share_pct": 5.3,
+        "mean_hours_per_zone_day": 0.55,
+        "records": 184,
+        "threshold_hours": 4.0,
+        "days_over_threshold": 11,
+        "value_kind": "measured"
+      }
+    ],
+    "monthly": [
+      {
+        "month": "2026-07",
+        "planned_t": 56637.0,
+        "actual_t": 47957.0,
+        "gap_t": -8680.0,
+        "attainment_pct": 84.67,
+        "records_with_actual": 61,
+        "equipment_downtime_h_mean": 3.99
+      },
+      {
+        "month": "2026-08",
+        "planned_t": 57598.5,
+        "actual_t": 47853.9,
+        "gap_t": -9744.6,
+        "attainment_pct": 83.08,
+        "records_with_actual": 62,
+        "equipment_downtime_h_mean": 3.84
+      },
+      {
+        "month": "2026-09",
+        "planned_t": 60536.0,
+        "actual_t": 51464.1,
+        "gap_t": -9071.9,
+        "attainment_pct": 85.01,
+        "records_with_actual": 60,
+        "equipment_downtime_h_mean": 4.96
+      }
+    ],
+    "zones": [
+      {
+        "mine_id": "SYN-A",
+        "zone_id": "SYN-A-Z2",
+        "records": 92,
+        "pending_rows": 0,
+        "planned_t": 67167.0,
+        "actual_t": 51711.9,
+        "gap_t": -15455.1,
+        "variance_pct": -23.01,
+        "attainment_pct": 76.99,
+        "equipment_downtime_h_total": 575.8,
+        "weather_delay_h_total": 506.2,
+        "blasting_delay_h_total": 66.4
+      },
+      {
+        "mine_id": "SYN-A",
+        "zone_id": "SYN-A-Z1",
+        "records": 92,
+        "pending_rows": 1,
+        "planned_t": 107604.5,
+        "actual_t": 95563.1,
+        "gap_t": -12041.4,
+        "variance_pct": -11.19,
+        "attainment_pct": 88.81,
+        "equipment_downtime_h_total": 207.2,
+        "weather_delay_h_total": 504.8,
+        "blasting_delay_h_total": 34.4
+      }
+    ],
+    "freshness": {
+      "last_actual_date": "2026-09-30",
+      "days_since_last_actual": 9,
+      "stale_threshold_days": 14,
+      "status": "fresh",
+      "as_of": "2026-10-09"
+    },
+    "provenance": {
+      "source_type": "synthetic",
+      "label": "SYNTHETIC DEMONSTRATION DATA",
+      "provider": "MineMind AI synthetic generator",
+      "description": "Deterministic daily production records for fictional mines SYN-A, SYN-B and SYN-C. Planned and actual tonnes, equipment downtime, weather and blasting delays, and rainfall are generated from simple, documented rules.",
+      "url": null,
+      "licence": "Not applicable (synthetic data generated for this demonstration).",
+      "attribution": null,
+      "timestamp": "2026-10-09T04:36:15.753609Z",
+      "limitations": [
+        "Not MOIL operational data and not calibrated to any real mine.",
+        "Relationships between delays and output are designed into the generator; associations found in this dataset describe the generator, not real operations.",
+        "Rainfall is synthetic here. Enrich the dataset with a public rainfall series to replace it.",
+        "... 1 more item(s) omitted"
+      ]
+    },
+    "notes": [
+      "SYNTHETIC DEMONSTRATION DATA - not MOIL operational records. Figures show how the workflow behaves; they are not evidence of real production performance.",
+      "223 row(s) have no recorded actual yet. They are excluded from gap and attainment figures; no values were imputed.",
+      "Gap and attainment compare plan and actual on the same days only (matched days)."
+    ]
+  }
+}

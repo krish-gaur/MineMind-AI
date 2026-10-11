@@ -1,0 +1,221 @@
+{
+  "request": "GET /api/exploration",
+  "status": 200,
+  "response": {
+    "datasets": {
+      "zones": {
+        "id": "demo-synthetic-exploration-zones-v1",
+        "name": "Synthetic demonstration exploration zones",
+        "source_type": "synthetic",
+        "source_label": "SYNTHETIC DEMONSTRATION DATA",
+        "is_synthetic": true,
+        "row_count": 6
+      },
+      "drillholes": {
+        "id": "demo-synthetic-drillholes-v1",
+        "name": "Synthetic demonstration drillholes",
+        "source_type": "synthetic",
+        "source_label": "SYNTHETIC DEMONSTRATION DATA",
+        "is_synthetic": true,
+        "row_count": 22
+      }
+    },
+    "banner": "SYNTHETIC DEMONSTRATION DATA. Zones and grades are invented. The ranking shows how the method works and is not an exploration finding.",
+    "ranking_enabled": true,
+    "zones": [
+      {
+        "zone_id": "EZ-01",
+        "name": "Demo zone 1",
+        "area_km2": 56.019,
+        "status": "observed",
+        "drillholes": 6,
+        "indicators": {
+          "host_unit_mapped": 1.0,
+          "mean_mn_pct": 32.17166666666667,
+          "share_high_grade": 1.0
+        },
+        "indicator_rows": [
+          {
+            "indicator": "host_unit_mapped",
+            "label": "Host unit mapped in zone (geological map)",
+            "value": 1.0,
+            "normalised": 1.0,
+            "weight": 0.2,
+            "evidence_class": "geological_map",
+            "available": true,
+            "value_kind": "measured"
+          },
+          {
+            "indicator": "mean_mn_pct",
+            "label": "Mean drillhole Mn grade (%)",
+            "value": 32.172,
+            "normalised": 1.0,
+            "weight": 0.4,
+            "evidence_class": "drilling",
+            "available": true,
+            "value_kind": "measured"
+          },
+          {
+            "indicator": "share_high_grade",
+            "label": "Share of intercepts at or above 20% Mn",
+            "value": 1.0,
+            "normalised": 1.0,
+            "weight": 0.4,
+            "evidence_class": "drilling",
+            "available": true,
+            "value_kind": "measured"
+          }
+        ],
+        "evidence_classes": [
+          "drilling",
+          "geological_map"
+        ],
+        "missing_inputs": [],
+        "score": 1.0,
+        "rank": 1,
+        "confidence": "medium",
+        "ranking_status": "ranked",
+        "ranking_reason": "Ranked on the available geological and drilling evidence.",
+        "value_kind": "index"
+      },
+      {
+        "zone_id": "EZ-02",
+        "name": "Demo zone 2",
+        "area_km2": 54.877,
+        "status": "observed",
+        "drillholes": 6,
+        "indicators": {
+          "host_unit_mapped": 1.0,
+          "mean_mn_pct": 20.52,
+          "share_high_grade": 0.8333333333333334
+        },
+        "indicator_rows": [
+          {
+            "indicator": "host_unit_mapped",
+            "label": "Host unit mapped in zone (geological map)",
+            "value": 1.0,
+            "normalised": 1.0,
+            "weight": 0.2,
+            "evidence_class": "geological_map",
+            "available": true,
+            "value_kind": "measured"
+          },
+          {
+            "indicator": "mean_mn_pct",
+            "label": "Mean drillhole Mn grade (%)",
+            "value": 20.52,
+            "normalised": 0.335,
+            "weight": 0.4,
+            "evidence_class": "drilling",
+            "available": true,
+            "value_kind": "measured"
+          },
+          {
+            "indicator": "share_high_grade",
+            "label": "Share of intercepts at or above 20% Mn",
+            "value": 0.833,
+            "normalised": 0.792,
+            "weight": 0.4,
+            "evidence_class": "drilling",
+            "available": true,
+            "value_kind": "measured"
+          }
+        ],
+        "evidence_classes": [
+          "drilling",
+          "geological_map"
+        ],
+        "missing_inputs": [],
+        "score": 0.651,
+        "rank": 2,
+        "confidence": "medium",
+        "ranking_status": "ranked",
+        "ranking_reason": "Ranked on the available geological and drilling evidence.",
+        "value_kind": "index"
+      },
+      {
+        "zone_id": "EZ-03",
+        "name": "Demo zone 3",
+        "area_km2": 54.877,
+        "status": "observed",
+        "drillholes": 5,
+        "indicators": {
+          "host_unit_mapped": 1.0,
+          "mean_mn_pct": 17.375999999999998,
+          "share_high_grade": 0.4
+        },
+        "indicator_rows": [
+          {
+            "indicator": "host_unit_mapped",
+            "label": "Host unit mapped in zone (geological map)",
+            "value": 1.0,
+            "normalised": 1.0,
+            "weight": 0.2,
+            "evidence_class": "geological_map",
+            "available": true,
+            "value_kind": "measured"
+          },
+          {
+            "indicator": "mean_mn_pct",
+            "label": "Mean drillhole Mn grade (%)",
+            "value": 17.376,
+            "normalised": 0.156,
+            "weight": 0.4,
+            "evidence_class": "drilling",
+            "available": true,
+            "value_kind": "measured"
+          },
+          {
+            "indicator": "share_high_grade",
+            "label": "Share of intercepts at or above 20% Mn",
+            "value": 0.4,
+            "normalised": 0.25,
+            "weight": 0.4,
+            "evidence_class": "drilling",
+            "available": true,
+            "value_kind": "measured"
+          }
+        ],
+        "evidence_classes": [
+          "drilling",
+          "geological_map"
+        ],
+        "missing_inputs": [],
+        "score": 0.362,
+        "rank": 3,
+        "confidence": "medium",
+        "ranking_status": "ranked",
+        "ranking_reason": "Ranked on the available geological and drilling evidence.",
+        "value_kind": "index"
+      },
+      "... 3 more item(s) omitted"
+    ],
+    "method": {
+      "weights": {
+        "host_unit_mapped": 0.2,
+        "mean_mn_pct": 0.4,
+        "share_high_grade": 0.4
+      },
+      "high_grade_cutoff_pct": 20.0,
+      "min_zones_to_rank": 3,
+      "min_evidence_classes_to_rank": 2,
+      "description": "Each scored indicator is min-max normalised across zones. The index is the weighted mean of the available normalised indicators, with weights renormalised over those available. The index is not a probability or a reserve estimate.",
+      "context_not_scored": [
+        "Vegetation indices (for example NDVI)",
+        "Rainfall, soil moisture and land-surface temperature",
+        "Radar (SAR) backscatter"
+      ],
+      "context_reason": "These respond to many non-mineral processes. Using them as evidence would present vegetation or moisture as proof of manganese, which the data does not support."
+    },
+    "required_inputs": [
+      "Geological map (lithology and structure) at a suitable scale, with the host unit mapped by a geologist.",
+      "Drillhole collars, depths and assays (Mn %), with QA/QC records and sample intervals.",
+      "Known occurrences and past mine records, to test proximity and to calibrate the index.",
+      "... 3 more item(s) omitted"
+    ],
+    "notes": [
+      "A zone with one evidence class (for example, a mapped host unit but no drilling) is listed unranked.",
+      "Map and drilling evidence must be validated by a geologist before any ranking informs drilling decisions."
+    ]
+  }
+}

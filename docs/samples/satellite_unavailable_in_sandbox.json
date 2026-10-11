@@ -1,0 +1,25 @@
+{
+  "request": "GET /api/geo/satellite/scenes?start=2026-09-01&end=2026-09-30",
+  "status": 200,
+  "response": {
+    "status": "unavailable",
+    "message": "Copernicus Data Space STAC catalogue could not be reached from this server.",
+    "retrieved_at": null,
+    "bbox": [
+      80.0,
+      21.7,
+      80.4,
+      "... 1 more item(s) omitted"
+    ],
+    "start": "2026-09-01",
+    "end": "2026-09-30",
+    "max_cloud_pct": 30.0,
+    "scenes": [],
+    "source": {
+      "name": "Copernicus Data Space STAC catalogue",
+      "licence": "Copernicus Sentinel data: free and open access.",
+      "attribution": "Contains modified Copernicus Sentinel data [year]."
+    },
+    "value_kind": "measured"
+  }
+}
